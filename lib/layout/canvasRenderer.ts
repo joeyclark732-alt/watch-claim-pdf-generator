@@ -2,6 +2,7 @@ import { geistMono, geistSans, geistSansBold } from "@/lib/fonts";
 import { containFit } from "./imageFit";
 import type { ImageOptions, LineOptions, PageRenderer, RectOptions, TextOptions } from "./renderer";
 import { INK } from "./theme";
+import { truncateToFit } from "./truncateText";
 
 /** Rendered at 2x for a crisp preview; layout math stays in points throughout. */
 const SCALE = 2;
@@ -20,28 +21,6 @@ function fontFamily(font: TextOptions["font"]): string {
 function cssFont(opts: { size: number; font: TextOptions["font"] }): string {
   const weight = opts.font === "sansBold" ? "700 " : "";
   return `${weight}${opts.size}px ${fontFamily(opts.font)}`;
-}
-
-/** Trims to fit maxWidth with an ellipsis — never the native squish behavior. */
-function truncateToFit(
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  maxWidth: number,
-): string {
-  if (ctx.measureText(text).width <= maxWidth) return text;
-  const ellipsis = "…";
-  let lo = 0;
-  let hi = text.length;
-  while (lo < hi) {
-    const mid = Math.ceil((lo + hi) / 2);
-    const candidate = text.slice(0, mid) + ellipsis;
-    if (ctx.measureText(candidate).width <= maxWidth) {
-      lo = mid;
-    } else {
-      hi = mid - 1;
-    }
-  }
-  return lo === 0 ? ellipsis : text.slice(0, lo) + ellipsis;
 }
 
 export class CanvasRenderer implements PageRenderer {
@@ -97,7 +76,7 @@ export class CanvasRenderer implements PageRenderer {
     ctx.textBaseline = "alphabetic";
     const rendered =
       opts.maxWidth !== undefined
-        ? truncateToFit(ctx, text, opts.maxWidth)
+        ? truncateToFit(text, opts.maxWidth, (t) => ctx.measureText(t).width)
         : text;
 
     let drawX = x;

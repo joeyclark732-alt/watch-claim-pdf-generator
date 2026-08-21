@@ -2,7 +2,7 @@ import { openDB, type IDBPDatabase } from "idb";
 import type { ClaimFileDB } from "./schema";
 
 const DB_NAME = "claim-file";
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 let dbPromise: Promise<IDBPDatabase<ClaimFileDB>> | null = null;
 
@@ -28,6 +28,9 @@ export function getDB(): Promise<IDBPDatabase<ClaimFileDB>> {
 
           const photos = db.createObjectStore("photos", { keyPath: "id" });
           photos.createIndex("watch_id", "watch_id");
+        }
+        if (oldVersion < 2) {
+          db.createObjectStore("license");
         }
       },
     });

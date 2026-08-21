@@ -88,6 +88,12 @@ export default function WatchListPage() {
             Preview claim file
           </Link>
           <Link
+            href="/license"
+            className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
+          >
+            License
+          </Link>
+          <Link
             href="/backup"
             className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
           >

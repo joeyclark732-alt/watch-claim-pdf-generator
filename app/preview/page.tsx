@@ -2,10 +2,116 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { getProfile, type ProfileRecord } from "@/lib/db";
+import { getProfile, getStoredLicenseKey, listWatches, type ProfileRecord } from "@/lib/db";
 import { CanvasRenderer } from "@/lib/layout/canvasRenderer";
 import { generateClaimFile } from "@/lib/layout/document";
+import { createPdfRenderer } from "@/lib/layout/pdfRenderer";
 import { applyPreviewWatermark } from "@/lib/layout/watermark";
+import { TIER_LABEL, TIER_PRICE_USD, TIER_RANGE_LABEL, WATCH_CAP, type Tier } from "@/lib/license/tiers";
+import { verifyLicenseKey, type LicensePayload } from "@/lib/license/verify";
+
+const TIER_ORDER: Tier[] = ["single", "collection", "unlimited"];
+
+function ExportSection({ ownedCount }: { ownedCount: number }) {
+  const [license, setLicense] = useState<LicensePayload | null | undefined>(undefined);
+  const [exporting, setExporting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const raw = await getStoredLicenseKey();
+      if (!raw) {
+        setLicense(null);
+        return;
+      }
+      const verified = await verifyLicenseKey(raw);
+      setLicense(verified?.payload ?? null);
+    })();
+  }, []);
+
+  if (license === undefined) return null;
+
+  if (!license) {
+    return (
+      <div className="border border-line p-4 text-sm">
+        <p className="mb-3">
+          A license unlocks the real, unwatermarked PDF export.{" "}
+          <Link href="/license" className="underline underline-offset-2">
+            Enter a license key
+          </Link>
+          .
+        </p>
+        <table className="w-full border-collapse text-xs">
+          <tbody>
+            {TIER_ORDER.map((tier) => (
+              <tr key={tier} className="border-t border-line">
+                <td className="py-1 pr-3">{TIER_LABEL[tier]}</td>
+                <td className="py-1 pr-3 text-ink-muted">{TIER_RANGE_LABEL[tier]}</td>
+                <td className="py-1 text-right font-mono">${TIER_PRICE_USD[tier]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
+
+  const cap = WATCH_CAP[license.tier];
+  const overCap = cap !== null && ownedCount > cap;
+
+  if (overCap) {
+    return (
+      <div className="border border-line p-4 text-sm">
+        <p>
+          Your {TIER_LABEL[license.tier]} license covers up to {cap} watches; you
+          have {ownedCount}.{" "}
+          <Link href="/license" className="underline underline-offset-2">
+            Upgrade
+          </Link>{" "}
+          to export all of them.
+        </p>
+      </div>
+    );
+  }
+
+  async function handleExport() {
+    setError(null);
+    setExporting(true);
+    try {
+      const renderer = await createPdfRenderer();
+      await generateClaimFile(renderer);
+      const bytes = await renderer.save();
+      const blob = new Blob([bytes as BlobPart], { type: "application/pdf" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `claim-file-${new Date().toISOString().slice(0, 10)}.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Could not generate the PDF.");
+    } finally {
+      setExporting(false);
+    }
+  }
+
+  return (
+    <div className="border border-line p-4 text-sm">
+      <p className="mb-3 text-ink-muted">
+        Licensed: {TIER_LABEL[license.tier]} ({license.email})
+      </p>
+      {error && <p className="mb-3 text-red-700">{error}</p>}
+      <button
+        type="button"
+        onClick={handleExport}
+        disabled={exporting}
+        className="border border-ink bg-ink px-5 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent disabled:opacity-50"
+      >
+        {exporting ? "Generating…" : "Export PDF"}
+      </button>
+    </div>
+  );
+}
 
 export default function PreviewPage() {
   const [profile, setProfileState] = useState<ProfileRecord | null | undefined>(
@@ -13,9 +119,13 @@ export default function PreviewPage() {
   );
   const [pageImages, setPageImages] = useState<string[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [ownedCount, setOwnedCount] = useState(0);
 
   useEffect(() => {
     getProfile().then((p) => setProfileState(p ?? null));
+    listWatches().then((watches) =>
+      setOwnedCount(watches.filter((w) => w.status === "owned").length),
+    );
   }, []);
 
   const profileComplete =
@@ -61,6 +171,8 @@ export default function PreviewPage() {
           PDF is generated after purchase.
         </p>
       </header>
+
+      {profile && profileComplete && <ExportSection ownedCount={ownedCount} />}
 
       {profile === undefined ? (
         <p className="text-sm text-ink-muted">Loading…</p>

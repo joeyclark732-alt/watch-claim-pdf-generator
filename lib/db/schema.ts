@@ -81,6 +81,13 @@ export interface ProfileRecord {
 /** Fixed out-of-line key `profile` is stored under — it's a single record, not a keyed collection. */
 export const PROFILE_KEY = "default";
 
+export interface LicenseRecord {
+  raw: string;
+}
+
+/** Fixed out-of-line key `license` is stored under, same pattern as `profile`. */
+export const LICENSE_KEY = "default";
+
 export interface ClaimFileDB extends DBSchema {
   profile: {
     key: string;
@@ -99,5 +106,9 @@ export interface ClaimFileDB extends DBSchema {
     key: string;
     value: PhotoRecord;
     indexes: { watch_id: string };
+  };
+  license: {
+    key: string;
+    value: LicenseRecord;
   };
 }

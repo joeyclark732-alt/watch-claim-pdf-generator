@@ -62,4 +62,20 @@ export interface PageRenderer {
     h: number,
     opts?: ImageOptions,
   ): Promise<void>;
+  /**
+   * Optional — only PdfRenderer implements these, for embedding real pages
+   * from a PDF-type document attachment (spec: "full-page reproductions of
+   * every attached document"). CanvasRenderer omits them; appendixPage.ts
+   * falls back to a page count of 1 and its placeholder page when absent,
+   * so the canvas preview is unaffected either way.
+   */
+  getPdfPageCount?(blob: Blob): Promise<number>;
+  drawPdfPage?(
+    blob: Blob,
+    pageIndex: number,
+    x: number,
+    y: number,
+    w: number,
+    h: number,
+  ): Promise<void>;
 }
