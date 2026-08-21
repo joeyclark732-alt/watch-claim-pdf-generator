@@ -11,18 +11,11 @@ import {
   type WatchRecord,
 } from "@/lib/db";
 import { scoreWatch, weightedCollectionScore } from "@/lib/scoring/completeness";
+import { formatCurrency } from "@/lib/format/currency";
 
 function formatValue(watch: WatchRecord): string {
   if (watch.declared_value == null) return "—";
-  try {
-    return new Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: watch.purchase_currency || "USD",
-      maximumFractionDigits: 0,
-    }).format(watch.declared_value);
-  } catch {
-    return watch.declared_value.toLocaleString();
-  }
+  return formatCurrency(watch.declared_value, watch.purchase_currency);
 }
 
 export default function WatchListPage() {
@@ -72,12 +65,26 @@ export default function WatchListPage() {
             </p>
           )}
         </div>
-        <Link
-          href="/watches/new"
-          className="border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent"
-        >
-          + Add watch
-        </Link>
+        <div className="flex items-center gap-4">
+          <Link
+            href="/settings"
+            className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
+          >
+            Settings
+          </Link>
+          <Link
+            href="/preview"
+            className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
+          >
+            Preview claim file
+          </Link>
+          <Link
+            href="/watches/new"
+            className="border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent"
+          >
+            + Add watch
+          </Link>
+        </div>
       </header>
 
       <label className="flex items-center gap-2 text-xs uppercase tracking-wide text-ink-muted">
