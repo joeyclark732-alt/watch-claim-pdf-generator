@@ -22,9 +22,9 @@ const EMPTY_WATCH: WatchInput = {
   declared_value_date: null,
   valuation_basis: null,
   condition_notes: "",
-  has_box: false,
-  has_papers: false,
-  has_extra_links: false,
+  has_box: null,
+  has_papers: null,
+  has_extra_links: null,
   status: "owned",
 };
 
@@ -39,6 +39,43 @@ const input =
   "w-full border border-line bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent";
 const sectionHeading =
   "text-xs uppercase tracking-widest text-ink-muted border-b border-line pb-1 mb-4";
+
+function TriStateField({
+  fieldLabel,
+  value,
+  onChange,
+}: {
+  fieldLabel: string;
+  value: boolean | null;
+  onChange: (value: boolean | null) => void;
+}) {
+  const options: { label: string; value: boolean | null }[] = [
+    { label: "Yes", value: true },
+    { label: "No", value: false },
+    { label: "Not set", value: null },
+  ];
+  return (
+    <div>
+      <label className={label}>{fieldLabel}</label>
+      <div className="flex border border-line text-xs">
+        {options.map((opt, i) => (
+          <button
+            key={String(opt.value)}
+            type="button"
+            onClick={() => onChange(opt.value)}
+            className={`flex-1 px-2 py-1.5 ${i > 0 ? "border-l border-line" : ""} ${
+              value === opt.value
+                ? "bg-ink text-paper"
+                : "bg-paper text-ink-muted hover:bg-ink/5"
+            }`}
+          >
+            {opt.label}
+          </button>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export function WatchForm({
   initialValue,
@@ -341,38 +378,21 @@ export function WatchForm({
               <option value="lost_stolen">Lost / stolen</option>
             </select>
           </div>
-          <div className="flex flex-col justify-end gap-2 text-sm">
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={value.has_box}
-                onChange={(e) =>
-                  setValue({ ...value, has_box: e.target.checked })
-                }
-              />
-              Has box
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={value.has_papers}
-                onChange={(e) =>
-                  setValue({ ...value, has_papers: e.target.checked })
-                }
-              />
-              Has papers
-            </label>
-            <label className="flex items-center gap-2">
-              <input
-                type="checkbox"
-                checked={value.has_extra_links}
-                onChange={(e) =>
-                  setValue({ ...value, has_extra_links: e.target.checked })
-                }
-              />
-              Has extra links
-            </label>
-          </div>
+          <TriStateField
+            fieldLabel="Has box"
+            value={value.has_box}
+            onChange={(v) => setValue({ ...value, has_box: v })}
+          />
+          <TriStateField
+            fieldLabel="Has papers"
+            value={value.has_papers}
+            onChange={(v) => setValue({ ...value, has_papers: v })}
+          />
+          <TriStateField
+            fieldLabel="Has extra links"
+            value={value.has_extra_links}
+            onChange={(v) => setValue({ ...value, has_extra_links: v })}
+          />
         </div>
       </section>
 

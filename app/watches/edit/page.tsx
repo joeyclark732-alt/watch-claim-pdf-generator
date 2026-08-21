@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { CompletenessPanel } from "@/components/CompletenessPanel";
 import { DocumentList } from "@/components/DocumentList";
 import { PhotoChecklist } from "@/components/PhotoChecklist";
 import { WatchForm } from "@/components/WatchForm";
@@ -23,6 +24,8 @@ function EditWatchForm() {
     undefined,
   );
   const watch = id ? loaded : null;
+  const [refreshKey, setRefreshKey] = useState(0);
+  const bumpRefresh = () => setRefreshKey((k) => k + 1);
 
   useEffect(() => {
     if (!id) return;
@@ -50,31 +53,35 @@ function EditWatchForm() {
           Watch not found. It may have been deleted.
         </p>
       ) : (
-        <WatchForm
-          initialValue={watch}
-          submitLabel="Save changes"
-          onSubmit={async (value) => {
-            const updated = await updateWatch(watch.id, value);
-            setLoaded(updated);
-          }}
-          onDelete={async () => {
-            if (
-              !window.confirm(
-                "Delete this watch? This cannot be undone. Documents and photos attached to it (once added) will also be removed.",
-              )
-            ) {
-              return;
-            }
-            await deleteWatch(watch.id);
-            router.push("/");
-          }}
-        />
-      )}
-
-      {watch && (
         <>
-          <PhotoChecklist watchId={watch.id} />
-          <DocumentList watchId={watch.id} />
+          <CompletenessPanel
+            watchId={watch.id}
+            watch={watch}
+            refreshKey={refreshKey}
+          />
+
+          <WatchForm
+            initialValue={watch}
+            submitLabel="Save changes"
+            onSubmit={async (value) => {
+              const updated = await updateWatch(watch.id, value);
+              setLoaded(updated);
+            }}
+            onDelete={async () => {
+              if (
+                !window.confirm(
+                  "Delete this watch? This cannot be undone. Documents and photos attached to it (once added) will also be removed.",
+                )
+              ) {
+                return;
+              }
+              await deleteWatch(watch.id);
+              router.push("/");
+            }}
+          />
+
+          <PhotoChecklist watchId={watch.id} onChange={bumpRefresh} />
+          <DocumentList watchId={watch.id} onChange={bumpRefresh} />
         </>
       )}
     </main>

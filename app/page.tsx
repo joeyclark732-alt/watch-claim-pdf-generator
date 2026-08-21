@@ -2,7 +2,15 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { listWatches, type WatchRecord } from "@/lib/db";
+import {
+  listAllDocuments,
+  listAllPhotos,
+  listWatches,
+  type DocumentRecord,
+  type PhotoRecord,
+  type WatchRecord,
+} from "@/lib/db";
+import { scoreWatch, weightedCollectionScore } from "@/lib/scoring/completeness";
 
 function formatValue(watch: WatchRecord): string {
   if (watch.declared_value == null) return "—";
@@ -19,15 +27,33 @@ function formatValue(watch: WatchRecord): string {
 
 export default function WatchListPage() {
   const [watches, setWatches] = useState<WatchRecord[] | null>(null);
+  const [photos, setPhotos] = useState<PhotoRecord[]>([]);
+  const [documents, setDocuments] = useState<DocumentRecord[]>([]);
   const [showAll, setShowAll] = useState(false);
 
   useEffect(() => {
     listWatches().then(setWatches);
+    listAllPhotos().then(setPhotos);
+    listAllDocuments().then(setDocuments);
   }, []);
 
   const visible = (watches ?? []).filter(
     (w) => showAll || w.status === "owned",
   );
+
+  const scores = new Map(
+    (watches ?? []).map((w) => [
+      w.id,
+      scoreWatch(
+        w,
+        photos.filter((p) => p.watch_id === w.id),
+        documents.filter((d) => d.watch_id === w.id),
+      ).score,
+    ]),
+  );
+  const collectionScore = watches
+    ? weightedCollectionScore(watches, scores)
+    : null;
 
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-6 py-12">
@@ -37,6 +63,14 @@ export default function WatchListPage() {
             Claim File
           </p>
           <h1 className="text-2xl font-semibold">Collection</h1>
+          {collectionScore !== null && visible.length > 0 && (
+            <p className="mt-1 text-xs text-ink-muted">
+              Collection completeness (value-weighted):{" "}
+              <span className="font-mono text-ink">
+                {collectionScore}/100
+              </span>
+            </p>
+          )}
         </div>
         <Link
           href="/watches/new"
@@ -76,6 +110,9 @@ export default function WatchListPage() {
                 <th className="px-3 py-2 font-medium">Serial</th>
                 <th className="px-3 py-2 font-medium">Status</th>
                 <th className="px-3 py-2 text-right font-medium">
+                  Completeness
+                </th>
+                <th className="px-3 py-2 text-right font-medium">
                   Declared value
                 </th>
               </tr>
@@ -103,6 +140,9 @@ export default function WatchListPage() {
                   </td>
                   <td className="px-3 py-2 capitalize">
                     {watch.status.replace("_", " / ")}
+                  </td>
+                  <td className="px-3 py-2 text-right font-mono">
+                    {scores.get(watch.id)}/100
                   </td>
                   <td className="px-3 py-2 text-right font-mono">
                     {formatValue(watch)}

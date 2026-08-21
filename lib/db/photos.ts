@@ -9,6 +9,12 @@ export async function listPhotosForWatch(
   return db.getAllFromIndex("photos", "watch_id", watchId);
 }
 
+/** For collection-wide scoring: one full-table read, grouped by watch_id in JS. */
+export async function listAllPhotos(): Promise<PhotoRecord[]> {
+  const db = await getDB();
+  return db.getAll("photos");
+}
+
 /**
  * Each shot type is a single named slot, not an accumulating gallery —
  * uploading a new photo for a slot that's already filled replaces it.

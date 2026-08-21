@@ -38,7 +38,13 @@ function ViewLink({ document }: { document: DocumentRecord }) {
   );
 }
 
-export function DocumentList({ watchId }: { watchId: string }) {
+export function DocumentList({
+  watchId,
+  onChange,
+}: {
+  watchId: string;
+  onChange?: () => void;
+}) {
   const [documents, setDocuments] = useState<DocumentRecord[] | null>(null);
   const [docType, setDocType] = useState<DocType>("receipt");
   const [issuedDate, setIssuedDate] = useState("");
@@ -74,6 +80,7 @@ export function DocumentList({ watchId }: { watchId: string }) {
       setIssuerName("");
       setNotes("");
       if (fileRef.current) fileRef.current.value = "";
+      onChange?.();
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Could not save document.",
@@ -120,6 +127,7 @@ export function DocumentList({ watchId }: { watchId: string }) {
                     setDocuments((prev) =>
                       (prev ?? []).filter((d) => d.id !== doc.id),
                     );
+                    onChange?.();
                   }}
                   className="text-ink-muted underline underline-offset-2 hover:text-red-700"
                 >

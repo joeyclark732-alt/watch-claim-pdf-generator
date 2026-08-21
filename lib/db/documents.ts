@@ -17,6 +17,12 @@ export async function listDocumentsForWatch(
   return db.getAllFromIndex("documents", "watch_id", watchId);
 }
 
+/** For collection-wide scoring: one full-table read, grouped by watch_id in JS. */
+export async function listAllDocuments(): Promise<DocumentRecord[]> {
+  const db = await getDB();
+  return db.getAll("documents");
+}
+
 export async function createDocument(
   watchId: string,
   input: DocumentInput,

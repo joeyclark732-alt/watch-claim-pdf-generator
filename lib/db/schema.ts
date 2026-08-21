@@ -23,9 +23,9 @@ export interface WatchRecord {
   declared_value_date: string | null;
   valuation_basis: ValuationBasis | null;
   condition_notes: string;
-  has_box: boolean;
-  has_papers: boolean;
-  has_extra_links: boolean;
+  has_box: boolean | null;
+  has_papers: boolean | null;
+  has_extra_links: boolean | null;
   status: WatchStatus;
   created_at: string;
   updated_at: string;

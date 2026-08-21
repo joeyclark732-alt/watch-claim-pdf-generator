@@ -129,7 +129,13 @@ function ShotSlot({
   );
 }
 
-export function PhotoChecklist({ watchId }: { watchId: string }) {
+export function PhotoChecklist({
+  watchId,
+  onChange,
+}: {
+  watchId: string;
+  onChange?: () => void;
+}) {
   const [photos, setPhotos] = useState<PhotoRecord[] | null>(null);
 
   useEffect(() => {
@@ -156,6 +162,7 @@ export function PhotoChecklist({ watchId }: { watchId: string }) {
                 ...(prev ?? []).filter((p) => p.shot_type !== type),
                 photo,
               ]);
+              onChange?.();
             }}
             onDelete={async () => {
               const existing = byShotType.get(type);
@@ -164,6 +171,7 @@ export function PhotoChecklist({ watchId }: { watchId: string }) {
               setPhotos((prev) =>
                 (prev ?? []).filter((p) => p.id !== existing.id),
               );
+              onChange?.();
             }}
           />
         ))}
