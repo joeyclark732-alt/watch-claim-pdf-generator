@@ -51,5 +51,23 @@ export async function updateWatch(
 
 export async function deleteWatch(id: string): Promise<void> {
   const db = await getDB();
-  await db.delete("watches", id);
+  const tx = db.transaction(["watches", "documents", "photos"], "readwrite");
+  await Promise.all([
+    tx.objectStore("watches").delete(id),
+    tx
+      .objectStore("documents")
+      .index("watch_id")
+      .getAllKeys(id)
+      .then((keys) =>
+        Promise.all(keys.map((key) => tx.objectStore("documents").delete(key))),
+      ),
+    tx
+      .objectStore("photos")
+      .index("watch_id")
+      .getAllKeys(id)
+      .then((keys) =>
+        Promise.all(keys.map((key) => tx.objectStore("photos").delete(key))),
+      ),
+  ]);
+  await tx.done;
 }

@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
+import { DocumentList } from "@/components/DocumentList";
+import { PhotoChecklist } from "@/components/PhotoChecklist";
 import { WatchForm } from "@/components/WatchForm";
 import { deleteWatch, getWatch, updateWatch, type WatchRecord } from "@/lib/db";
 
@@ -28,7 +30,7 @@ function EditWatchForm() {
   }, [id]);
 
   return (
-    <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-6 py-12">
+    <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-6 py-12">
       <header className="border-b border-line pb-4">
         <Link
           href="/"
@@ -67,6 +69,13 @@ function EditWatchForm() {
             router.push("/");
           }}
         />
+      )}
+
+      {watch && (
+        <>
+          <PhotoChecklist watchId={watch.id} />
+          <DocumentList watchId={watch.id} />
+        </>
       )}
     </main>
   );
