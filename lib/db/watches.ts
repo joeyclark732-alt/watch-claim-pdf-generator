@@ -1,3 +1,4 @@
+import { bumpEditCount } from "@/lib/backup/reminder";
 import { getDB } from "./client";
 import type { WatchRecord } from "./schema";
 
@@ -16,6 +17,7 @@ export async function createWatch(input: WatchInput): Promise<WatchRecord> {
     updated_at: now,
   };
   await db.put("watches", watch);
+  bumpEditCount();
   return watch;
 }
 
@@ -46,6 +48,7 @@ export async function updateWatch(
     updated_at: new Date().toISOString(),
   };
   await db.put("watches", updated);
+  bumpEditCount();
   return updated;
 }
 
@@ -69,5 +72,15 @@ export async function deleteWatch(id: string): Promise<void> {
         Promise.all(keys.map((key) => tx.objectStore("photos").delete(key))),
       ),
   ]);
+  await tx.done;
+  bumpEditCount();
+}
+
+/** Preserves original IDs/timestamps — for restoring a backup, not user-entry creation. */
+export async function restoreWatches(records: WatchRecord[]): Promise<void> {
+  if (records.length === 0) return;
+  const db = await getDB();
+  const tx = db.transaction("watches", "readwrite");
+  await Promise.all(records.map((record) => tx.store.put(record)));
   await tx.done;
 }

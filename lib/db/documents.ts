@@ -1,3 +1,4 @@
+import { bumpEditCount } from "@/lib/backup/reminder";
 import { processForDocument } from "@/lib/images/process";
 import { getDB } from "./client";
 import type { DocType, DocumentRecord } from "./schema";
@@ -43,10 +44,21 @@ export async function createDocument(
 
   const db = await getDB();
   await db.put("documents", document);
+  bumpEditCount();
   return document;
 }
 
 export async function deleteDocument(id: string): Promise<void> {
   const db = await getDB();
   await db.delete("documents", id);
+  bumpEditCount();
+}
+
+/** Preserves original IDs — for restoring a backup, not user-entry creation. */
+export async function restoreDocuments(records: DocumentRecord[]): Promise<void> {
+  if (records.length === 0) return;
+  const db = await getDB();
+  const tx = db.transaction("documents", "readwrite");
+  await Promise.all(records.map((record) => tx.store.put(record)));
+  await tx.done;
 }

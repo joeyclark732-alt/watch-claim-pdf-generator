@@ -1,3 +1,4 @@
+import { bumpEditCount } from "@/lib/backup/reminder";
 import { processForChecklist } from "@/lib/images/process";
 import { getDB } from "./client";
 import type { PhotoRecord, ShotType } from "./schema";
@@ -45,6 +46,7 @@ export async function setPhotoForShotType(
   };
   await tx.store.put(photo);
   await tx.done;
+  bumpEditCount();
 
   return photo;
 }
@@ -52,4 +54,14 @@ export async function setPhotoForShotType(
 export async function deletePhoto(id: string): Promise<void> {
   const db = await getDB();
   await db.delete("photos", id);
+  bumpEditCount();
+}
+
+/** Preserves original IDs — for restoring a backup, not user-entry creation. */
+export async function restorePhotos(records: PhotoRecord[]): Promise<void> {
+  if (records.length === 0) return;
+  const db = await getDB();
+  const tx = db.transaction("photos", "readwrite");
+  await Promise.all(records.map((record) => tx.store.put(record)));
+  await tx.done;
 }

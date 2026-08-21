@@ -12,6 +12,7 @@ import {
 } from "@/lib/db";
 import { scoreWatch, weightedCollectionScore } from "@/lib/scoring/completeness";
 import { formatCurrency } from "@/lib/format/currency";
+import { BACKUP_REMINDER_THRESHOLD, getEditCount } from "@/lib/backup/reminder";
 
 function formatValue(watch: WatchRecord): string {
   if (watch.declared_value == null) return "—";
@@ -23,11 +24,19 @@ export default function WatchListPage() {
   const [photos, setPhotos] = useState<PhotoRecord[]>([]);
   const [documents, setDocuments] = useState<DocumentRecord[]>([]);
   const [showAll, setShowAll] = useState(false);
+  // Starts at 0 to match the statically-prerendered HTML (no localStorage at
+  // build time), then corrected in the effect below. A lazy initializer here
+  // would read the real value on the client's first render too, mismatching
+  // the prerendered markup — the two-render pattern is required, not optional,
+  // despite the lint rule below normally warning against it.
+  const [editCount, setEditCount] = useState(0);
 
   useEffect(() => {
     listWatches().then(setWatches);
     listAllPhotos().then(setPhotos);
     listAllDocuments().then(setDocuments);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setEditCount(getEditCount());
   }, []);
 
   const visible = (watches ?? []).filter(
@@ -79,6 +88,12 @@ export default function WatchListPage() {
             Preview claim file
           </Link>
           <Link
+            href="/backup"
+            className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
+          >
+            Backup
+          </Link>
+          <Link
             href="/watches/new"
             className="border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent"
           >
@@ -86,6 +101,20 @@ export default function WatchListPage() {
           </Link>
         </div>
       </header>
+
+      {editCount >= BACKUP_REMINDER_THRESHOLD && (
+        <div className="flex items-center justify-between border border-line bg-ink/5 px-4 py-2 text-sm">
+          <span>
+            You&apos;ve made {editCount} changes since your last backup.
+          </span>
+          <Link
+            href="/backup"
+            className="underline underline-offset-2 hover:text-ink"
+          >
+            Export a backup
+          </Link>
+        </div>
+      )}
 
       <label className="flex items-center gap-2 text-xs uppercase tracking-wide text-ink-muted">
         <input
