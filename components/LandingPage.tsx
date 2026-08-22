@@ -1,11 +1,199 @@
 import Link from "next/link";
-import { TIER_LABEL, TIER_PRICE_USD, TIER_RANGE_LABEL } from "@/lib/license/tiers";
+import { TIER_LABEL, TIER_PRICE_USD, TIER_RANGE_LABEL, WATCH_CAP, type Tier } from "@/lib/license/tiers";
 import { WatchIcon } from "./WatchIcon";
 
 const sectionHeading =
   "text-xs uppercase tracking-widest text-ink-muted border-b border-rule pb-2 mb-6";
 
 const cornerTick = "absolute font-mono text-xs text-ink-muted";
+
+const tag =
+  "inline-flex w-fit items-center border border-rule bg-paper px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-ink-muted";
+
+function ChecklistVisual() {
+  const slots = [
+    { label: "Dial", filled: true },
+    { label: "Caseback", filled: true },
+    { label: "Serial macro", filled: false },
+    { label: "Clasp", filled: true },
+    { label: "Side profile", filled: false },
+    { label: "Movement", filled: false },
+  ];
+  return (
+    <div className="grid w-full max-w-xs grid-cols-3 gap-2">
+      {slots.map((s) => (
+        <div key={s.label} className="border border-rule bg-paper p-2 text-center">
+          <div
+            className={`mb-1.5 flex h-10 items-center justify-center ${
+              s.filled ? "bg-ink-muted/25" : "border border-dashed border-rule"
+            }`}
+          >
+            {!s.filled && <span className="text-ink-muted">+</span>}
+          </div>
+          <p className="font-mono text-[8px] uppercase tracking-wide text-ink-muted">
+            {s.label}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function NetworkVisual() {
+  const rows = [
+    { path: "/_next/static/chunks/…", status: "self" },
+    { path: "/fonts/Geist-Regular.ttf", status: "self" },
+    { path: "checkout.stripe.com", status: "only external call" },
+  ];
+  return (
+    <div className="w-full max-w-sm border border-rule bg-paper">
+      <div className="border-b border-rule bg-paper-sunk px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-ink-muted">
+        Network
+      </div>
+      <div className="flex flex-col divide-y divide-rule font-mono text-[10px]">
+        {rows.map((r) => (
+          <div key={r.path} className="flex items-center justify-between gap-3 px-3 py-2.5">
+            <span className="truncate text-ink-body">{r.path}</span>
+            <span className="shrink-0 text-ink-muted">{r.status}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function ScoreVisual() {
+  const gaps = [
+    { label: "Add a caseback photo", points: 5 },
+    { label: "Attach a receipt or appraisal", points: 20 },
+  ];
+  return (
+    <div className="w-full max-w-sm border border-rule bg-paper">
+      <div className="flex items-center justify-between border-b border-rule bg-paper-sunk px-3 py-2">
+        <span className="font-mono text-[10px] uppercase tracking-widest text-ink-muted">
+          Completeness
+        </span>
+        <span className="font-mono text-lg font-semibold text-oxblood">87/100</span>
+      </div>
+      <div className="flex flex-col divide-y divide-rule text-xs">
+        {gaps.map((g) => (
+          <div key={g.label} className="flex items-center justify-between px-3 py-2.5">
+            <span>{g.label}</span>
+            <span className="font-mono text-ink-muted">+{g.points}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function FeatureRow({
+  tagLabel,
+  title,
+  subtitle,
+  body,
+  visual,
+}: {
+  tagLabel: string;
+  title: string;
+  subtitle: string;
+  body: string;
+  visual: React.ReactNode;
+}) {
+  return (
+    <div className="grid grid-cols-1 border border-rule bg-paper md:grid-cols-2">
+      <div className="flex flex-col justify-center gap-4 p-8 md:p-10">
+        <span className={tag}>{tagLabel}</span>
+        <div>
+          <h3 className="text-xl font-semibold leading-snug">{title}</h3>
+          <p className="text-xl font-semibold leading-snug text-ink-muted">{subtitle}</p>
+        </div>
+        <p className="max-w-md text-sm leading-relaxed text-ink-body">{body}</p>
+      </div>
+      <div className="flex min-h-[220px] items-center justify-center border-t border-rule bg-paper-sunk p-8 md:border-l md:border-t-0 md:p-10">
+        {visual}
+      </div>
+    </div>
+  );
+}
+
+const TIER_ORDER: Tier[] = ["single", "collection", "unlimited"];
+
+function PricingCard({
+  name,
+  descriptor,
+  price,
+  isFree,
+  extraFeature,
+}: {
+  name: string;
+  descriptor: string;
+  price: string;
+  isFree: boolean;
+  extraFeature?: string;
+}) {
+  const baseFeatures = [
+    "Unlimited watch entry",
+    "Guided photo checklist",
+    "Completeness scoring",
+    "Encrypted local backup",
+  ];
+
+  return (
+    <div className="flex flex-col border border-rule bg-paper p-6">
+      <h3 className="text-lg font-semibold">{name}</h3>
+      <p className="mt-1 text-xs text-ink-muted">{descriptor}</p>
+      <p className="mt-4 font-mono text-3xl font-semibold">
+        {price}
+        {!isFree && (
+          <span className="ml-1.5 text-xs font-normal text-ink-muted">one-time</span>
+        )}
+      </p>
+      <div className="mt-4">
+        {isFree ? (
+          <Link
+            href="/watches/new"
+            className="block border border-oxblood bg-oxblood px-4 py-2 text-center text-sm font-medium text-paper transition hover:opacity-90"
+          >
+            Start free
+          </Link>
+        ) : (
+          <div className="border border-dashed border-rule px-4 py-2 text-center text-xs uppercase tracking-widest text-ink-muted">
+            Checkout coming soon
+          </div>
+        )}
+      </div>
+      <ul className="mt-6 flex flex-col gap-2.5 border-t border-rule pt-6 text-xs">
+        {isFree ? (
+          <>
+            {baseFeatures.map((f) => (
+              <li key={f} className="flex items-start gap-2">
+                <span className="text-ink-muted">✓</span>
+                <span>{f}</span>
+              </li>
+            ))}
+            <li className="flex items-start gap-2 text-ink-muted">
+              <span>–</span>
+              <span>Watermarked preview only</span>
+            </li>
+          </>
+        ) : (
+          <>
+            <li className="text-ink-muted">Everything in Free, plus:</li>
+            <li className="flex items-start gap-2">
+              <span className="text-ink-muted">✓</span>
+              <span>Real, unwatermarked PDF export</span>
+            </li>
+            <li className="flex items-start gap-2">
+              <span className="text-ink-muted">✓</span>
+              <span>{extraFeature}</span>
+            </li>
+          </>
+        )}
+      </ul>
+    </div>
+  );
+}
 
 function DocumentMockup() {
   return (
@@ -109,60 +297,31 @@ export function LandingPage() {
         </div>
       </section>
 
-      <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-16 px-6 py-16">
-        <section>
-          <h2 className={sectionHeading}>Why local-first</h2>
-          <p className="max-w-xl text-sm leading-relaxed">
-            A tool that catalogues your valuables into someone else&apos;s
-            database is fighting its own pitch. So this one doesn&apos;t:
-            there is no server holding a list of what you own and where you
-            live. Nothing to breach, nothing to subpoena, nothing to leak,
-            because there is nothing to leak from — every watch, photo, and
-            document stays in this browser&apos;s local storage on this
-            device.
-          </p>
-        </section>
+      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-6 py-16">
+        <FeatureRow
+          tagLabel="Guided checklist"
+          title="One named shot at a time,"
+          subtitle="not nine wrist shots"
+          body="The app asks for exactly one shot at a time — dial, caseback, serial macro, clasp — so you end up with the photos an adjuster actually needs, not a phone full of pictures of the same angle."
+          visual={<ChecklistVisual />}
+        />
+        <FeatureRow
+          tagLabel="Verifiable, not promised"
+          title="Nothing leaves this device,"
+          subtitle="except a Stripe checkout"
+          body="This app's Content Security Policy restricts every outbound call to Stripe, and only Stripe. Open your browser's devtools and check the Network tab yourself — it isn't a claim you have to take on faith."
+          visual={<NetworkVisual />}
+        />
+        <FeatureRow
+          tagLabel="Completeness score"
+          title="Every gap, named —"
+          subtitle="with exactly what it's worth"
+          body="No vague nagging. Each unscored item shows a specific instruction and its point value, so you always know exactly what closes the gap between a bare entry and a complete one."
+          visual={<ScoreVisual />}
+        />
+      </div>
 
-        <section>
-          <h2 className={sectionHeading}>Verifiable, not promised</h2>
-          <p className="max-w-xl text-sm leading-relaxed">
-            Don&apos;t take that on faith. This app&apos;s Content Security
-            Policy restricts every outbound network call to Stripe, and only
-            Stripe — open your browser&apos;s devtools, watch the Network
-            tab, and confirm it yourself. Every photo is re-encoded through a
-            canvas before it&apos;s stored, which strips EXIF metadata
-            including the GPS coordinates a phone photo taken at home would
-            otherwise carry.
-          </p>
-        </section>
-
-        <section>
-          <h2 className={sectionHeading}>How it works</h2>
-          <ol className="flex max-w-xl flex-col gap-3 text-sm leading-relaxed">
-            <li>
-              <span className="font-mono text-ink-muted">01</span> Enter each
-              watch&apos;s identification, provenance, and valuation details.
-            </li>
-            <li>
-              <span className="font-mono text-ink-muted">02</span> Follow the
-              guided photo checklist — one named shot at a time, so you end up
-              with a serial macro instead of nine wrist shots.
-            </li>
-            <li>
-              <span className="font-mono text-ink-muted">03</span> Attach
-              receipts, appraisals, and service records.
-            </li>
-            <li>
-              <span className="font-mono text-ink-muted">04</span> Watch your
-              completeness score climb as the gaps close.
-            </li>
-            <li>
-              <span className="font-mono text-ink-muted">05</span> Export a
-              document an adjuster can act on.
-            </li>
-          </ol>
-        </section>
-
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-16 px-6 pb-16">
         <section>
           <h2 className={sectionHeading}>No valuations</h2>
           <p className="max-w-xl text-sm leading-relaxed">
@@ -171,44 +330,36 @@ export function LandingPage() {
             market value — the exported document says so on its cover page.
           </p>
         </section>
+      </div>
 
-        <section>
-          <h2 className={sectionHeading}>Pricing</h2>
-          <p className="mb-4 max-w-xl text-sm text-ink-muted">
+      <div className="border-t border-rule py-16">
+        <div className="mx-auto w-full max-w-5xl px-6">
+          <h2 className="text-center text-2xl font-semibold">Built to be paid for once</h2>
+          <p className="mx-auto mt-2 max-w-md text-center text-sm text-ink-muted">
             Free to enter your entire collection, take every photo, and see
             your completeness scores. The only thing gated is exporting the
             real, unwatermarked PDF.
           </p>
-          <div className="border border-rule">
-            <table className="w-full border-collapse text-sm">
-              <thead>
-                <tr className="border-b border-rule bg-paper-sunk text-left text-xs uppercase tracking-wide text-ink-muted">
-                  <th className="px-3 py-2 font-medium">Tier</th>
-                  <th className="px-3 py-2 font-medium">Covers</th>
-                  <th className="px-3 py-2 text-right font-medium">Price</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b border-rule">
-                  <td className="px-3 py-2">Free</td>
-                  <td className="px-3 py-2 text-ink-muted">
-                    Unlimited entry, watermarked preview
-                  </td>
-                  <td className="px-3 py-2 text-right font-mono">$0</td>
-                </tr>
-                {(["single", "collection", "unlimited"] as const).map((tier) => (
-                  <tr key={tier} className="border-b border-rule last:border-b-0">
-                    <td className="px-3 py-2">{TIER_LABEL[tier]}</td>
-                    <td className="px-3 py-2 text-ink-muted">{TIER_RANGE_LABEL[tier]}</td>
-                    <td className="px-3 py-2 text-right font-mono">
-                      ${TIER_PRICE_USD[tier]}
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+
+          <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <PricingCard name="Free" descriptor="Preview only" price="$0" isFree />
+            {TIER_ORDER.map((tier) => (
+              <PricingCard
+                key={tier}
+                name={TIER_LABEL[tier]}
+                descriptor={TIER_RANGE_LABEL[tier]}
+                price={`$${TIER_PRICE_USD[tier]}`}
+                isFree={false}
+                extraFeature={
+                  WATCH_CAP[tier] === null
+                    ? "Any number of watches"
+                    : `Up to ${WATCH_CAP[tier]} watches`
+                }
+              />
+            ))}
           </div>
-          <p className="mt-4 text-xs text-ink-muted">
+
+          <p className="mt-6 text-center text-xs text-ink-muted">
             Purchasing isn&apos;t live yet — checkout is coming soon. Already
             licensed?{" "}
             <Link href="/license" className="underline underline-offset-2">
@@ -216,7 +367,7 @@ export function LandingPage() {
             </Link>
             .
           </p>
-        </section>
+        </div>
       </div>
     </main>
   );
