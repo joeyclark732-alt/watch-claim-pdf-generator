@@ -42,6 +42,12 @@ export default function NewWatchPage() {
   const needsProfileFirst =
     isFirstWatch === true && profile !== undefined && !profileComplete;
 
+  useEffect(() => {
+    if (needsProfileFirst) {
+      router.replace("/settings");
+    }
+  }, [needsProfileFirst, router]);
+
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-8 px-6 py-12">
       <header className="flex items-start justify-between border-b border-rule pb-4">
@@ -54,21 +60,8 @@ export default function NewWatchPage() {
         <BackLink />
       </header>
 
-      {isFirstWatch === undefined || profile === undefined ? (
+      {isFirstWatch === undefined || profile === undefined || needsProfileFirst ? (
         <p className="text-sm text-ink-muted">Loading…</p>
-      ) : needsProfileFirst ? (
-        <div className="border border-rule p-6 text-sm">
-          <p className="mb-4">
-            Add your name and mailing address in Settings before adding your
-            first watch — they appear on the claim file&apos;s cover page.
-          </p>
-          <Link
-            href="/settings"
-            className="border border-oxblood bg-oxblood px-4 py-2 text-sm font-medium text-paper transition hover:opacity-90"
-          >
-            Go to Settings
-          </Link>
-        </div>
       ) : (
         <WatchForm
           submitLabel="Save watch"

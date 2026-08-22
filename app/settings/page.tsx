@@ -16,6 +16,11 @@ export default function SettingsPage() {
     getProfile().then((p) => setLoadedProfile(p ?? null));
   }, []);
 
+  const profileComplete =
+    !!profile &&
+    profile.full_legal_name.trim() !== "" &&
+    profile.mailing_address.trim() !== "";
+
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-6 py-12">
       <header className="flex items-start justify-between border-b border-rule pb-4">
@@ -38,6 +43,15 @@ export default function SettingsPage() {
             setLoadedProfile(value);
           }}
         />
+      )}
+
+      {profileComplete && (
+        <Link
+          href="/watches/new"
+          className="flex items-center justify-center border border-oxblood bg-oxblood px-6 py-4 text-base font-medium text-paper transition hover:opacity-90"
+        >
+          Continue to add watch →
+        </Link>
       )}
     </main>
   );

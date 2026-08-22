@@ -91,12 +91,6 @@ export function CollectionList() {
             License
           </Link>
           <Link
-            href="/backup"
-            className="text-label text-ink-muted hover:text-ink"
-          >
-            Backup
-          </Link>
-          <Link
             href="/watches/new"
             className="border border-oxblood bg-oxblood px-4 py-2 text-sm font-medium text-paper transition hover:opacity-90"
           >
