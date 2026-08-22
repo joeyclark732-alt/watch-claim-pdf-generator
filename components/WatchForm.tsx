@@ -34,11 +34,12 @@ function toNumberOrNull(raw: string): number | null {
   return Number.isNaN(n) ? null : n;
 }
 
-const label = "block text-xs uppercase tracking-wide text-ink-muted mb-1";
-const input =
-  "w-full border border-rule bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
-const sectionHeading =
-  "text-xs uppercase tracking-widest text-ink-muted border-b border-rule pb-1 mb-4";
+const label = "block text-label text-ink-muted mb-1";
+const inputBase =
+  "w-full border border-rule bg-paper px-2 py-1.5 text-sm text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
+const input = inputBase;
+const inputMono = `${inputBase} font-mono`;
+const sectionHeading = "text-label text-ink-muted border-b border-rule pb-1 mb-4";
 
 function TriStateField({
   fieldLabel,
@@ -142,7 +143,7 @@ export function WatchForm({
           <div>
             <label className={label}>Reference number</label>
             <input
-              className={input}
+              className={inputMono}
               value={value.reference_number}
               onChange={(e) =>
                 setValue({ ...value, reference_number: e.target.value })
@@ -152,7 +153,7 @@ export function WatchForm({
           <div>
             <label className={label}>Serial number</label>
             <input
-              className={input}
+              className={inputMono}
               value={value.serial_number}
               onChange={(e) =>
                 setValue({ ...value, serial_number: e.target.value })
@@ -172,7 +173,7 @@ export function WatchForm({
           <div>
             <label className={label}>Case diameter (mm)</label>
             <input
-              className={input}
+              className={inputMono}
               type="number"
               step="0.1"
               value={value.case_diameter_mm ?? ""}
@@ -187,7 +188,7 @@ export function WatchForm({
           <div>
             <label className={label}>Lug width (mm)</label>
             <input
-              className={input}
+              className={inputMono}
               type="number"
               step="0.5"
               value={value.lug_width_mm ?? ""}
@@ -237,7 +238,7 @@ export function WatchForm({
           <div>
             <label className={label}>Purchase date</label>
             <input
-              className={input}
+              className={inputMono}
               type="date"
               value={value.purchase_date ?? ""}
               onChange={(e) =>
@@ -251,7 +252,7 @@ export function WatchForm({
           <div>
             <label className={label}>Purchase price</label>
             <input
-              className={input}
+              className={inputMono}
               type="number"
               step="0.01"
               value={value.purchase_price ?? ""}
@@ -297,7 +298,7 @@ export function WatchForm({
           <div>
             <label className={label}>Declared value</label>
             <input
-              className={input}
+              className={inputMono}
               type="number"
               step="0.01"
               value={value.declared_value ?? ""}
@@ -312,7 +313,7 @@ export function WatchForm({
           <div>
             <label className={label}>Declared value date</label>
             <input
-              className={input}
+              className={inputMono}
               type="date"
               value={value.declared_value_date ?? ""}
               onChange={(e) =>

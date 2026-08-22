@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Wordmark } from "@/components/Wordmark";
 import { useEffect, useState } from "react";
 import { getProfile, getStoredLicenseKey, listWatches, type ProfileRecord } from "@/lib/db";
 import { CanvasRenderer } from "@/lib/layout/canvasRenderer";
@@ -41,7 +42,7 @@ function ExportSection({ ownedCount }: { ownedCount: number }) {
           </Link>
           .
         </p>
-        <table className="w-full border-collapse text-xs">
+        <table className="w-full border-collapse text-table">
           <tbody>
             {TIER_ORDER.map((tier) => (
               <tr key={tier} className="border-t border-rule">
@@ -159,13 +160,10 @@ export default function PreviewPage() {
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-6 py-12">
       <header className="border-b border-rule pb-4">
-        <Link
-          href="/"
-          className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
-        >
-          ← Collection
+        <Link href="/" className="inline-block">
+          <Wordmark />
         </Link>
-        <h1 className="mt-1 text-2xl font-semibold">WatchClaim Preview</h1>
+        <h1 className="mt-3 text-title font-medium">Preview</h1>
         <p className="mt-1 text-xs text-ink-muted">
           Every page at full fidelity, watermarked. The real, unwatermarked
           PDF is generated after purchase.

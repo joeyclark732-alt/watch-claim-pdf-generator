@@ -1,7 +1,9 @@
 import { PAGE_HEIGHT_PT, PAGE_WIDTH_PT, type PageRenderer } from "./renderer";
+import { drawSeal } from "./seal";
 import { INK_MUTED } from "./theme";
 
 const MARGIN = 54;
+const SEAL_SIZE = 12;
 
 /**
  * Pure — no "total pages" baked in here. document.ts runs this in a second
@@ -17,7 +19,8 @@ export function drawFooter(
   data: { generatedDate: string; ownerName: string },
 ): void {
   const y = PAGE_HEIGHT_PT - 30;
-  renderer.drawText(`Generated ${data.generatedDate}`, MARGIN, y, {
+  drawSeal(renderer, MARGIN + SEAL_SIZE / 2, y - 3, SEAL_SIZE);
+  renderer.drawText(`Generated ${data.generatedDate}`, MARGIN + SEAL_SIZE + 6, y, {
     size: 8,
     font: "mono",
     color: INK_MUTED,

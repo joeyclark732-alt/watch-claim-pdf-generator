@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Wordmark } from "@/components/Wordmark";
 import { useRef, useState, type FormEvent } from "react";
 import { buildBundle, restoreBundle, type BundleData } from "@/lib/backup/bundle";
 import { decryptBundle, encryptBundle, type EncryptedBundle } from "@/lib/backup/crypto";
@@ -8,7 +9,7 @@ import { resetEditCount } from "@/lib/backup/reminder";
 
 const MIN_PASSPHRASE_LENGTH = 8;
 
-const label = "block text-xs uppercase tracking-wide text-ink-muted mb-1";
+const label = "block text-label text-ink-muted mb-1";
 const input =
   "w-full border border-rule bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
 
@@ -58,7 +59,7 @@ function ExportSection() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 border border-rule p-4">
-      <h2 className="text-xs uppercase tracking-widest text-ink-muted">Export</h2>
+      <h2 className="text-label text-ink-muted">Export</h2>
       <div>
         <label className={label}>Passphrase</label>
         <input
@@ -132,7 +133,7 @@ function ImportSection() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 border border-rule p-4">
-      <h2 className="text-xs uppercase tracking-widest text-ink-muted">Import</h2>
+      <h2 className="text-label text-ink-muted">Import</h2>
       <div>
         <label className={label}>Backup file</label>
         <input ref={fileRef} type="file" accept=".claimfile" className={input} />
@@ -165,13 +166,10 @@ export default function BackupPage() {
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-6 py-12">
       <header className="border-b border-rule pb-4">
-        <Link
-          href="/"
-          className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
-        >
-          ← Collection
+        <Link href="/" className="inline-block">
+          <Wordmark />
         </Link>
-        <h1 className="mt-1 text-2xl font-semibold">Backup</h1>
+        <h1 className="mt-3 text-title font-medium">Backup</h1>
       </header>
 
       <p className="border border-rule bg-paper-sunk p-4 text-sm text-ink-muted">

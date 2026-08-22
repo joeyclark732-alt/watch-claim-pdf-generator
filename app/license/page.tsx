@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
+import { Wordmark } from "@/components/Wordmark";
 import { useEffect, useState } from "react";
 import { getStoredLicenseKey, setStoredLicenseKey } from "@/lib/db";
 import { TIER_LABEL, TIER_PRICE_USD, TIER_RANGE_LABEL, type Tier } from "@/lib/license/tiers";
 import { verifyLicenseKey, type LicensePayload } from "@/lib/license/verify";
 
-const label = "block text-xs uppercase tracking-wide text-ink-muted mb-1";
+const label = "block text-label text-ink-muted mb-1";
 const input =
   "w-full border border-rule bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
 
@@ -50,13 +51,10 @@ export default function LicensePage() {
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-6 py-12">
       <header className="border-b border-rule pb-4">
-        <Link
-          href="/"
-          className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
-        >
-          ← Collection
+        <Link href="/" className="inline-block">
+          <Wordmark />
         </Link>
-        <h1 className="mt-1 text-2xl font-semibold">License</h1>
+        <h1 className="mt-3 text-title font-medium">License</h1>
       </header>
 
       {current !== undefined && (
@@ -95,9 +93,9 @@ export default function LicensePage() {
       </div>
 
       <div className="border border-rule">
-        <table className="w-full border-collapse text-sm">
+        <table className="w-full border-collapse text-table">
           <thead>
-            <tr className="border-b border-rule bg-paper-sunk text-left text-xs uppercase tracking-wide text-ink-muted">
+            <tr className="border-b border-rule bg-paper-sunk text-left text-label text-ink-muted">
               <th className="px-3 py-2 font-medium">Tier</th>
               <th className="px-3 py-2 font-medium">Covers</th>
               <th className="px-3 py-2 text-right font-medium">Price</th>

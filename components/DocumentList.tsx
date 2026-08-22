@@ -20,9 +20,11 @@ const DOC_TYPES: { value: DocType; label: string }[] = [
   { value: "other", label: "Other" },
 ];
 
-const label = "block text-xs uppercase tracking-wide text-ink-muted mb-1";
-const input =
-  "w-full border border-rule bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
+const label = "block text-label text-ink-muted mb-1";
+const inputBase =
+  "w-full border border-rule bg-paper px-2 py-1.5 text-sm text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
+const input = inputBase;
+const inputMono = `${inputBase} font-mono`;
 
 function ViewLink({ document }: { document: DocumentRecord }) {
   const url = useObjectUrl(document.blob);
@@ -92,7 +94,7 @@ export function DocumentList({
 
   return (
     <section>
-      <h2 className="text-xs uppercase tracking-widest text-ink-muted border-b border-rule pb-1 mb-4">
+      <h2 className="text-label text-ink-muted border-b border-rule pb-1 mb-4">
         Documents
       </h2>
 
@@ -169,7 +171,7 @@ export function DocumentList({
         <div>
           <label className={label}>Issued date</label>
           <input
-            className={input}
+            className={inputMono}
             type="date"
             value={issuedDate}
             onChange={(e) => setIssuedDate(e.target.value)}

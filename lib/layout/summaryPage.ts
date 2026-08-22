@@ -26,15 +26,16 @@ function columnX(index: number): number {
 }
 
 function drawColumnHeaders(renderer: PageRenderer, y: number): number {
-  renderer.drawText("Summary Schedule", MARGIN, y, { size: 14, font: "sansBold" });
+  renderer.drawText("Summary schedule", MARGIN, y, { size: 14, font: "serif" });
   y += 26;
   COLUMNS.forEach((col, i) => {
     renderer.drawText(col.label, columnX(i) + (col.align === "right" ? col.width - 4 : 0), y, {
       size: 8,
-      font: "mono",
+      font: "sans",
       color: INK_MUTED,
       align: col.align === "right" ? "right" : "left",
       maxWidth: col.width - 4,
+      tracking: 0.08,
     });
   });
   y += 6;
@@ -73,7 +74,8 @@ export function renderSummarySchedule(renderer: PageRenderer, watches: WatchReco
       const col = COLUMNS[i];
       renderer.drawText(text, columnX(i) + (col.align === "right" ? col.width - 4 : 0), rowY, {
         size: 9,
-        font: i === 1 || i === 2 ? "sans" : "mono",
+        // Brand, Model, Basis are text; #, Reference, Serial, Value, Val. date are figures.
+        font: i === 1 || i === 2 || i === 6 ? "sans" : "mono",
         align: col.align === "right" ? "right" : "left",
         maxWidth: col.width - 4,
       });

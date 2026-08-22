@@ -1,6 +1,7 @@
 import type { ProfileRecord, WatchRecord } from "@/lib/db";
 import { formatCurrency } from "@/lib/format/currency";
 import { PAGE_HEIGHT_PT, PAGE_WIDTH_PT, type PageRenderer } from "./renderer";
+import { drawSeal } from "./seal";
 import { INK_MUTED, RULE } from "./theme";
 import { wrapText } from "./wrapText";
 
@@ -28,19 +29,17 @@ export function renderCoverPage(
 ): void {
   renderer.addPage(PAGE_WIDTH_PT, PAGE_HEIGHT_PT);
   const { profile, watches, generatedDate } = data;
-  let y = 100;
+  const centerX = PAGE_WIDTH_PT / 2;
+  let y = 96;
 
-  renderer.drawText("WATCHCLAIM", MARGIN, y, {
-    size: 10,
-    font: "mono",
-    color: INK_MUTED,
+  drawSeal(renderer, centerX, y, 44);
+  y += 60;
+  renderer.drawText("Watch collection documentation", centerX, y, {
+    size: 21,
+    font: "serif",
+    align: "center",
   });
-  y += 28;
-  renderer.drawText("Watch Collection Documentation", MARGIN, y, {
-    size: 26,
-    font: "sansBold",
-  });
-  y += 48;
+  y += 40;
 
   renderer.drawLine(MARGIN, y, PAGE_WIDTH_PT - MARGIN, y, { color: RULE });
   y += 28;

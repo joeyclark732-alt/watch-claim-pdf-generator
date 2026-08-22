@@ -31,7 +31,7 @@ const DOC_TYPE_LABEL: Record<DocumentRecord["doc_type"], string> = {
 function drawItemHeader(renderer: PageRenderer, watch: WatchRecord, y: number): number {
   renderer.drawText(`${watch.brand} ${watch.model_name}`.trim() || "Watch", MARGIN, y, {
     size: 16,
-    font: "sansBold",
+    font: "serif",
     maxWidth: CONTENT_WIDTH,
   });
   y += 18;
@@ -51,10 +51,11 @@ function drawItemHeader(renderer: PageRenderer, watch: WatchRecord, y: number): 
 }
 
 function sectionLabel(renderer: PageRenderer, text: string, y: number): void {
-  renderer.drawText(text.toUpperCase(), MARGIN, y, {
+  renderer.drawText(text, MARGIN, y, {
     size: 8,
-    font: "mono",
+    font: "sans",
     color: INK_MUTED,
+    tracking: 0.08,
   });
 }
 
@@ -71,7 +72,7 @@ function fieldGridHeight(count: number, columns: number): number {
 function drawFieldGrid(
   renderer: PageRenderer,
   y: number,
-  fields: { label: string; value: string }[],
+  fields: { label: string; value: string; mono?: boolean }[],
   columns: number,
 ): void {
   const colWidth = CONTENT_WIDTH / columns;
@@ -80,15 +81,16 @@ function drawFieldGrid(
     const row = Math.floor(i / columns);
     const fx = MARGIN + col * colWidth;
     const fy = y + row * GRID_ROW_H;
-    renderer.drawText(f.label.toUpperCase(), fx, fy, {
+    renderer.drawText(f.label, fx, fy, {
       size: 7,
-      font: "mono",
+      font: "sans",
       color: INK_MUTED,
       maxWidth: colWidth - 8,
+      tracking: 0.08,
     });
     renderer.drawText(f.value, fx, fy + 13, {
       size: 10,
-      font: "sans",
+      font: f.mono ? "mono" : "sans",
       maxWidth: colWidth - 8,
     });
   });
@@ -112,11 +114,11 @@ export async function renderItemPage(
 
   // Identification
   const idFields = [
-    { label: "Reference number", value: watch.reference_number || "—" },
-    { label: "Serial number", value: watch.serial_number || "—" },
+    { label: "Reference number", value: watch.reference_number || "—", mono: true },
+    { label: "Serial number", value: watch.serial_number || "—", mono: true },
     { label: "Case material", value: watch.case_material || "—" },
-    { label: "Case diameter", value: watch.case_diameter_mm != null ? `${watch.case_diameter_mm} mm` : "—" },
-    { label: "Lug width", value: watch.lug_width_mm != null ? `${watch.lug_width_mm} mm` : "—" },
+    { label: "Case diameter", value: watch.case_diameter_mm != null ? `${watch.case_diameter_mm} mm` : "—", mono: true },
+    { label: "Lug width", value: watch.lug_width_mm != null ? `${watch.lug_width_mm} mm` : "—", mono: true },
     { label: "Movement", value: watch.movement_type || "—" },
     { label: "Strap / bracelet", value: watch.strap_type || "—" },
     { label: "Complications", value: watch.complications.length ? watch.complications.join(", ") : "—" },
@@ -129,10 +131,11 @@ export async function renderItemPage(
 
   // Provenance
   const provFields = [
-    { label: "Purchase date", value: watch.purchase_date || "—" },
+    { label: "Purchase date", value: watch.purchase_date || "—", mono: true },
     {
       label: "Purchase price",
       value: watch.purchase_price != null ? formatCurrency(watch.purchase_price, watch.purchase_currency) : "—",
+      mono: true,
     },
     { label: "Purchase source", value: watch.purchase_source || "—" },
   ];
@@ -148,8 +151,9 @@ export async function renderItemPage(
     {
       label: "Declared value",
       value: watch.declared_value != null ? formatCurrency(watch.declared_value, watch.purchase_currency) : "—",
+      mono: true,
     },
-    { label: "Valuation date", value: watch.declared_value_date || "—" },
+    { label: "Valuation date", value: watch.declared_value_date || "—", mono: true },
     { label: "Basis", value: watch.valuation_basis ? basisLabel[watch.valuation_basis] : "—" },
   ];
   const valHeight = fieldGridHeight(valFields.length, 3);
@@ -206,7 +210,7 @@ export async function renderItemPage(
     }
     renderer.drawText(caption, cx + cellW / 2, cy + cellPhotoH + 9, {
       size: 8,
-      font: "mono",
+      font: "sans",
       color: INK_MUTED,
       align: "center",
     });

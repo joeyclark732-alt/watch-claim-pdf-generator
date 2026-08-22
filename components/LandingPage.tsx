@@ -1,11 +1,13 @@
 import Link from "next/link";
 import { TIER_LABEL, TIER_PRICE_USD, TIER_RANGE_LABEL, WATCH_CAP, type Tier } from "@/lib/license/tiers";
+import { Seal } from "./Seal";
+import { Wordmark } from "./Wordmark";
 import { WatchIcon } from "./WatchIcon";
 
 const cornerTick = "absolute font-mono text-xs text-ink-muted";
 
 const tag =
-  "inline-flex w-fit items-center border border-rule bg-paper px-2 py-1 font-mono text-[10px] uppercase tracking-widest text-ink-muted";
+  "inline-flex w-fit items-center border border-rule bg-paper px-2 py-1 text-label text-ink-muted";
 
 function ChecklistVisual() {
   const slots = [
@@ -27,7 +29,7 @@ function ChecklistVisual() {
           >
             {!s.filled && <span className="text-ink-muted">+</span>}
           </div>
-          <p className="font-mono text-[8px] uppercase tracking-wide text-ink-muted">
+          <p className="text-[8px] tracking-[0.08em] text-ink-muted">
             {s.label}
           </p>
         </div>
@@ -39,18 +41,18 @@ function ChecklistVisual() {
 function NetworkVisual() {
   const rows = [
     { path: "/_next/static/chunks/…", status: "self" },
-    { path: "/fonts/Geist-Regular.ttf", status: "self" },
+    { path: "/fonts/PublicSans-Regular.ttf", status: "self" },
     { path: "checkout.stripe.com", status: "only external call" },
   ];
   return (
     <div className="w-full max-w-sm border border-rule bg-paper">
-      <div className="border-b border-rule bg-paper-sunk px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-ink-muted">
+      <div className="border-b border-rule bg-paper-sunk px-3 py-1.5 text-label text-ink-muted">
         Network
       </div>
-      <div className="flex flex-col divide-y divide-rule font-mono text-[10px]">
+      <div className="flex flex-col divide-y divide-rule text-[10px]">
         {rows.map((r) => (
           <div key={r.path} className="flex items-center justify-between gap-3 px-3 py-2.5">
-            <span className="truncate text-ink-body">{r.path}</span>
+            <span className="truncate font-mono text-ink-body">{r.path}</span>
             <span className="shrink-0 text-ink-muted">{r.status}</span>
           </div>
         ))}
@@ -61,20 +63,20 @@ function NetworkVisual() {
 
 function ValuationVisual() {
   const fields = [
-    { label: "Declared value", value: "$5,200" },
-    { label: "Valuation basis", value: "Receipt" },
-    { label: "Valuation date", value: "2025-03-14" },
+    { label: "Declared value", value: "$5,200", mono: true },
+    { label: "Valuation basis", value: "Receipt", mono: false },
+    { label: "Valuation date", value: "2025-03-14", mono: true },
   ];
   return (
     <div className="w-full max-w-sm border border-rule bg-paper">
-      <div className="border-b border-rule bg-paper-sunk px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-ink-muted">
+      <div className="border-b border-rule bg-paper-sunk px-3 py-1.5 text-label text-ink-muted">
         Valuation
       </div>
       <div className="flex flex-col divide-y divide-rule text-xs">
         {fields.map((f) => (
           <div key={f.label} className="flex items-center justify-between px-3 py-2.5">
-            <span className="font-mono text-[10px] uppercase text-ink-muted">{f.label}</span>
-            <span className="font-mono">{f.value}</span>
+            <span className="text-[10px] tracking-[0.08em] text-ink-muted">{f.label}</span>
+            <span className={f.mono ? "font-mono" : ""}>{f.value}</span>
           </div>
         ))}
       </div>
@@ -93,10 +95,10 @@ function ScoreVisual() {
   return (
     <div className="w-full max-w-sm border border-rule bg-paper">
       <div className="flex items-center justify-between border-b border-rule bg-paper-sunk px-3 py-2">
-        <span className="font-mono text-[10px] uppercase tracking-widest text-ink-muted">
+        <span className="text-label text-ink-muted">
           Completeness
         </span>
-        <span className="font-mono text-lg font-semibold text-oxblood">87/100</span>
+        <span className="font-mono text-lg font-medium text-oxblood">87/100</span>
       </div>
       <div className="flex flex-col divide-y divide-rule text-xs">
         {gaps.map((g) => (
@@ -128,8 +130,8 @@ function FeatureRow({
       <div className="flex flex-col justify-center gap-4 p-8 md:p-10">
         <span className={tag}>{tagLabel}</span>
         <div>
-          <h3 className="text-xl font-semibold leading-snug">{title}</h3>
-          <p className="text-xl font-semibold leading-snug text-ink-muted">{subtitle}</p>
+          <h3 className="text-xl font-medium leading-snug">{title}</h3>
+          <p className="text-xl font-medium leading-snug text-ink-muted">{subtitle}</p>
         </div>
         <p className="max-w-md text-sm leading-relaxed text-ink-body">{body}</p>
       </div>
@@ -164,9 +166,9 @@ function PricingCard({
 
   return (
     <div className="flex flex-col border border-rule bg-paper p-6">
-      <h3 className="text-lg font-semibold">{name}</h3>
+      <h3 className="text-lg font-medium">{name}</h3>
       <p className="mt-1 text-xs text-ink-muted">{descriptor}</p>
-      <p className="mt-4 font-mono text-3xl font-semibold">
+      <p className="mt-4 font-mono text-3xl font-medium">
         {price}
         {!isFree && (
           <span className="ml-1.5 text-xs font-normal text-ink-muted">one-time</span>
@@ -181,7 +183,7 @@ function PricingCard({
             Start free
           </Link>
         ) : (
-          <div className="border border-dashed border-rule px-4 py-2 text-center text-xs uppercase tracking-widest text-ink-muted">
+          <div className="border border-dashed border-rule px-4 py-2 text-center text-label text-ink-muted">
             Checkout coming soon
           </div>
         )}
@@ -224,9 +226,7 @@ function DocumentMockup() {
       {/* Background card: an abstracted skeleton of the exported cover page,
           not real content, just enough shape to read as "a document." */}
       <div className="border border-rule bg-paper p-6 shadow-sm">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-ink-muted">
-          WatchClaim
-        </p>
+        <Seal size={20} />
         <div className="mt-3 h-4 w-3/4 bg-paper-sunk" />
         <div className="mt-6 flex flex-col gap-2">
           <div className="h-2 w-1/2 bg-paper-sunk" />
@@ -247,10 +247,10 @@ function DocumentMockup() {
       {/* Floating card: the completeness figure, the one place besides the
           primary button and the appendix rule where oxblood is sanctioned. */}
       <div className="absolute -bottom-7 -left-6 w-40 border border-rule bg-paper p-4 shadow-md sm:-left-10">
-        <p className="font-mono text-[10px] uppercase tracking-widest text-ink-muted">
+        <p className="text-label text-ink-muted">
           Completeness
         </p>
-        <p className="mt-1 font-mono text-2xl font-semibold text-oxblood">94/100</p>
+        <p className="mt-1 font-mono text-2xl font-medium text-oxblood">94/100</p>
         <div className="mt-2 h-1.5 w-full bg-paper-sunk">
           <div className="h-1.5 w-[94%] bg-oxblood" />
         </div>
@@ -260,10 +260,10 @@ function DocumentMockup() {
       <div className="absolute -top-6 -right-4 flex items-center gap-3 border border-rule bg-paper p-3 shadow-md sm:-right-8">
         <WatchIcon className="h-9 w-9 shrink-0 text-ink" />
         <div>
-          <p className="font-mono text-[10px] uppercase tracking-widest text-ink-muted">
+          <p className="text-label text-ink-muted">
             Collection
           </p>
-          <p className="font-mono text-sm font-semibold">12 watches</p>
+          <p className="font-mono text-sm font-medium">12 watches</p>
         </div>
       </div>
     </div>
@@ -275,17 +275,19 @@ export function LandingPage() {
     <main className="flex flex-1 flex-col">
       <header className="sticky top-0 z-10 border-b border-rule bg-paper/95 backdrop-blur">
         <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
-          <span className="shrink-0 text-xs uppercase tracking-widest text-ink-muted">WatchClaim</span>
+          <Link href="/" className="inline-block shrink-0">
+            <Wordmark />
+          </Link>
           <nav className="flex items-center gap-4 sm:gap-6">
             <a
               href="#features"
-              className="hidden text-xs uppercase tracking-widest text-ink-muted hover:text-ink sm:inline"
+              className="hidden text-label text-ink-muted hover:text-ink sm:inline"
             >
               Features
             </a>
             <a
               href="#pricing"
-              className="hidden text-xs uppercase tracking-widest text-ink-muted hover:text-ink sm:inline"
+              className="hidden text-label text-ink-muted hover:text-ink sm:inline"
             >
               Pricing
             </a>
@@ -308,8 +310,7 @@ export function LandingPage() {
 
         <div className="relative mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-16 px-6 py-24 lg:grid-cols-2">
           <div>
-            <p className="text-xs uppercase tracking-widest text-ink-muted">WatchClaim</p>
-            <h1 className="mt-2 max-w-xl text-4xl font-semibold leading-tight sm:text-5xl">
+            <h1 className="max-w-xl font-serif text-headline">
               Insurance-ready watch documentation that never leaves your device.
             </h1>
             <p className="mt-4 max-w-lg text-sm text-ink-muted">
@@ -327,13 +328,13 @@ export function LandingPage() {
               </Link>
               <Link
                 href="/license"
-                className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
+                className="text-label text-ink-muted hover:text-ink"
               >
                 Already have a license?
               </Link>
               <Link
                 href="/backup"
-                className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
+                className="text-label text-ink-muted hover:text-ink"
               >
                 Restoring from a backup?
               </Link>
@@ -347,7 +348,7 @@ export function LandingPage() {
       </section>
 
       <div id="features" className="mx-auto flex w-full max-w-4xl scroll-mt-16 flex-col px-6 py-16">
-        <h2 className="text-center text-2xl font-semibold">Product Features</h2>
+        <h2 className="text-center text-2xl font-medium">Product Features</h2>
         <div className="mx-auto mt-10 flex w-full flex-col gap-6">
           <FeatureRow
             tagLabel="Guided checklist"
@@ -382,7 +383,7 @@ export function LandingPage() {
 
       <div id="pricing" className="scroll-mt-16 border-t border-rule py-16">
         <div className="mx-auto w-full max-w-5xl px-6">
-          <h2 className="text-center text-2xl font-semibold">Built to be paid for once</h2>
+          <h2 className="text-center text-2xl font-medium">Built to be paid for once</h2>
           <p className="mx-auto mt-2 max-w-md text-center text-sm text-ink-muted">
             Free to enter your entire collection, take every photo, and see
             your completeness scores. The only thing gated is exporting the

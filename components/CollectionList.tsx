@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Wordmark } from "./Wordmark";
 import { useEffect, useState } from "react";
 import {
   listAllDocuments,
@@ -61,14 +62,14 @@ export function CollectionList() {
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-6 py-12">
       <header className="flex items-end justify-between border-b border-rule pb-4">
         <div>
-          <p className="text-xs uppercase tracking-widest text-ink-muted">
-            WatchClaim
-          </p>
-          <h1 className="text-2xl font-semibold">Collection</h1>
+          <Link href="/" className="inline-block">
+            <Wordmark />
+          </Link>
+          <h1 className="mt-3 text-title font-medium">Collection</h1>
           {collectionScore !== null && visible.length > 0 && (
-            <p className="mt-1 text-xs text-ink-muted">
+            <p className="mt-1 text-secondary text-ink-muted">
               Collection completeness (value-weighted):{" "}
-              <span className="font-mono font-semibold text-oxblood">
+              <span className="font-mono font-medium text-oxblood">
                 {collectionScore}/100
               </span>
             </p>
@@ -77,25 +78,25 @@ export function CollectionList() {
         <div className="flex items-center gap-4">
           <Link
             href="/settings"
-            className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
+            className="text-label text-ink-muted hover:text-ink"
           >
             Settings
           </Link>
           <Link
             href="/preview"
-            className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
+            className="text-label text-ink-muted hover:text-ink"
           >
             Preview claim file
           </Link>
           <Link
             href="/license"
-            className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
+            className="text-label text-ink-muted hover:text-ink"
           >
             License
           </Link>
           <Link
             href="/backup"
-            className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
+            className="text-label text-ink-muted hover:text-ink"
           >
             Backup
           </Link>
@@ -122,7 +123,7 @@ export function CollectionList() {
         </div>
       )}
 
-      <label className="flex items-center gap-2 text-xs uppercase tracking-wide text-ink-muted">
+      <label className="flex items-center gap-2 text-label text-ink-muted">
         <input
           type="checkbox"
           checked={showAll}
@@ -143,9 +144,9 @@ export function CollectionList() {
         </p>
       ) : (
         <div className="overflow-x-auto border border-rule">
-          <table className="w-full min-w-[720px] border-collapse text-sm">
+          <table className="w-full min-w-[720px] border-collapse text-table">
             <thead>
-              <tr className="border-b border-rule bg-paper-sunk text-left text-xs uppercase tracking-wide text-ink-muted">
+              <tr className="border-b border-rule bg-paper-sunk text-left text-label text-ink-muted">
                 <th className="px-3 py-2 font-medium">Brand</th>
                 <th className="px-3 py-2 font-medium">Model</th>
                 <th className="px-3 py-2 font-medium">Reference</th>
@@ -183,7 +184,7 @@ export function CollectionList() {
                   <td className="px-3 py-2 capitalize">
                     {watch.status.replace("_", " / ")}
                   </td>
-                  <td className="px-3 py-2 text-right font-mono font-semibold text-oxblood">
+                  <td className="px-3 py-2 text-right font-mono font-medium text-oxblood">
                     {scores.get(watch.id)}/100
                   </td>
                   <td className="px-3 py-2 text-right font-mono">

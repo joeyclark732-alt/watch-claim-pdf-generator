@@ -1,6 +1,13 @@
-import { geistMono, geistSans, geistSansBold } from "@/lib/fonts";
+import { instrumentSerif, jetbrainsMono, publicSans, publicSansMedium } from "@/lib/fonts";
 import { containFit } from "./imageFit";
-import type { ImageOptions, LineOptions, PageRenderer, RectOptions, TextOptions } from "./renderer";
+import type {
+  CircleOptions,
+  ImageOptions,
+  LineOptions,
+  PageRenderer,
+  RectOptions,
+  TextOptions,
+} from "./renderer";
 import { INK, PAPER } from "./theme";
 import { truncateToFit } from "./truncateText";
 
@@ -9,17 +16,19 @@ const SCALE = 2;
 
 function fontFamily(font: TextOptions["font"]): string {
   switch (font) {
+    case "serif":
+      return instrumentSerif.style.fontFamily;
     case "sans":
-      return geistSans.style.fontFamily;
-    case "sansBold":
-      return geistSansBold.style.fontFamily;
+      return publicSans.style.fontFamily;
+    case "sansMedium":
+      return publicSansMedium.style.fontFamily;
     case "mono":
-      return geistMono.style.fontFamily;
+      return jetbrainsMono.style.fontFamily;
   }
 }
 
 function cssFont(opts: { size: number; font: TextOptions["font"] }): string {
-  const weight = opts.font === "sansBold" ? "700 " : "";
+  const weight = opts.font === "sansMedium" ? "500 " : "";
   return `${weight}${opts.size}px ${fontFamily(opts.font)}`;
 }
 
@@ -72,6 +81,7 @@ export class CanvasRenderer implements PageRenderer {
   drawText(text: string, x: number, y: number, opts: TextOptions): void {
     const ctx = this.ctx;
     ctx.font = cssFont(opts);
+    ctx.letterSpacing = opts.tracking ? `${opts.tracking * opts.size}px` : "0px";
     ctx.fillStyle = opts.color ?? INK;
     ctx.textBaseline = "alphabetic";
     const rendered =
@@ -89,9 +99,10 @@ export class CanvasRenderer implements PageRenderer {
 
   measureTextWidth(
     text: string,
-    opts: { size: number; font: TextOptions["font"] },
+    opts: { size: number; font: TextOptions["font"]; tracking?: number },
   ): number {
     this.scratch.font = cssFont(opts);
+    this.scratch.letterSpacing = opts.tracking ? `${opts.tracking * opts.size}px` : "0px";
     return this.scratch.measureText(text).width;
   }
 
@@ -105,6 +116,21 @@ export class CanvasRenderer implements PageRenderer {
       ctx.strokeStyle = opts.stroke;
       ctx.lineWidth = opts.strokeWidth ?? 1;
       ctx.strokeRect(x, y, w, h);
+    }
+  }
+
+  drawCircle(cx: number, cy: number, r: number, opts: CircleOptions): void {
+    const ctx = this.ctx;
+    ctx.beginPath();
+    ctx.arc(cx, cy, r, 0, Math.PI * 2);
+    if (opts.fill) {
+      ctx.fillStyle = opts.fill;
+      ctx.fill();
+    }
+    if (opts.stroke) {
+      ctx.strokeStyle = opts.stroke;
+      ctx.lineWidth = opts.strokeWidth ?? 1;
+      ctx.stroke();
     }
   }
 

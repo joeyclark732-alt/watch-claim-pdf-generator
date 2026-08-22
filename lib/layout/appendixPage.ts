@@ -22,7 +22,7 @@ function drawCaption(
   pageLabel?: string,
 ): number {
   const title = `${watch.brand} ${watch.model_name}`.trim() || "Watch";
-  renderer.drawText(title, MARGIN, 60, { size: 10, font: "sansBold" });
+  renderer.drawText(title, MARGIN, 60, { size: 10, font: "serif" });
   const subtitle = [
     DOC_TYPE_LABEL[doc.doc_type],
     doc.issued_date,
@@ -43,7 +43,7 @@ function drawPlaceholder(renderer: PageRenderer, top: number, bottom: number, fi
   const center = top + boxH / 2;
   renderer.drawText(fileName, PAGE_WIDTH_PT / 2, center - 10, {
     size: 11,
-    font: "sansBold",
+    font: "sansMedium",
     align: "center",
     maxWidth: CONTENT_WIDTH - 40,
   });

@@ -10,9 +10,11 @@ const EMPTY_PROFILE: ProfileRecord = {
   policy_number: "",
 };
 
-const label = "block text-xs uppercase tracking-wide text-ink-muted mb-1";
-const input =
-  "w-full border border-rule bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
+const label = "block text-label text-ink-muted mb-1";
+const inputBase =
+  "w-full border border-rule bg-paper px-2 py-1.5 text-sm text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
+const input = inputBase;
+const inputMono = `${inputBase} font-mono`;
 
 export function ProfileForm({
   initialValue,
@@ -83,7 +85,7 @@ export function ProfileForm({
         <div>
           <label className={label}>Policy number</label>
           <input
-            className={input}
+            className={inputMono}
             value={value.policy_number}
             onChange={(e) =>
               setValue({ ...value, policy_number: e.target.value })

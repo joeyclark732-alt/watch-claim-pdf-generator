@@ -83,7 +83,7 @@ function ShotSlot({
   return (
     <div className="border border-rule">
       <div className="border-b border-rule bg-paper-sunk px-3 py-1.5">
-        <p className="text-xs uppercase tracking-wide">{slotLabel}</p>
+        <p className="text-label">{slotLabel}</p>
       </div>
       {photo ? (
         <div>
@@ -146,7 +146,7 @@ export function PhotoChecklist({
 
   return (
     <section>
-      <h2 className="text-xs uppercase tracking-widest text-ink-muted border-b border-rule pb-1 mb-4">
+      <h2 className="text-label text-ink-muted border-b border-rule pb-1 mb-4">
         Photos
       </h2>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">

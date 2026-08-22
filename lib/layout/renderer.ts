@@ -1,7 +1,7 @@
 export const PAGE_WIDTH_PT = 612; // US Letter, 72pt/inch
 export const PAGE_HEIGHT_PT = 792;
 
-export type FontKey = "sans" | "sansBold" | "mono";
+export type FontKey = "serif" | "sans" | "sansMedium" | "mono";
 
 export interface TextOptions {
   size: number;
@@ -15,9 +15,21 @@ export interface TextOptions {
    * Multi-line text goes through `wrapText()` and multiple `drawText` calls.
    */
   maxWidth?: number;
+  /**
+   * Extra space between characters, in em (fraction of `size`). Reserved
+   * for the label/caption text style (11px, tracked 0.08em) — body text
+   * never sets this.
+   */
+  tracking?: number;
 }
 
 export interface RectOptions {
+  fill?: string;
+  stroke?: string;
+  strokeWidth?: number;
+}
+
+export interface CircleOptions {
   fill?: string;
   stroke?: string;
   strokeWidth?: number;
@@ -53,6 +65,7 @@ export interface PageRenderer {
    */
   measureTextWidth(text: string, opts: Omit<TextOptions, "align" | "maxWidth">): number;
   drawRect(x: number, y: number, w: number, h: number, opts: RectOptions): void;
+  drawCircle(cx: number, cy: number, r: number, opts: CircleOptions): void;
   drawLine(x1: number, y1: number, x2: number, y2: number, opts: LineOptions): void;
   drawImage(
     blob: Blob,

@@ -1,14 +1,23 @@
 import fontkit from "@pdf-lib/fontkit";
 import { PDFDocument, rgb, type Color, type PDFFont, type PDFPage } from "pdf-lib";
 import { containFit } from "./imageFit";
-import type { FontKey, ImageOptions, LineOptions, PageRenderer, RectOptions, TextOptions } from "./renderer";
+import type {
+  CircleOptions,
+  FontKey,
+  ImageOptions,
+  LineOptions,
+  PageRenderer,
+  RectOptions,
+  TextOptions,
+} from "./renderer";
 import { INK, PAPER } from "./theme";
 import { truncateToFit } from "./truncateText";
 
 const FONT_PATHS: Record<FontKey, string> = {
-  sans: "/fonts/Geist-Regular.ttf",
-  sansBold: "/fonts/Geist-Bold.ttf",
-  mono: "/fonts/GeistMono-Regular.ttf",
+  serif: "/fonts/InstrumentSerif-Regular.ttf",
+  sans: "/fonts/PublicSans-Regular.ttf",
+  sansMedium: "/fonts/PublicSans-Medium.ttf",
+  mono: "/fonts/JetBrainsMono-Regular.ttf",
 };
 
 function hexToColor(hex: string): Color {
@@ -54,12 +63,11 @@ export class PdfRenderer implements PageRenderer {
 
     const keys = Object.keys(FONT_PATHS) as FontKey[];
     const bytes = await Promise.all(keys.map((k) => fetchFontBytes(FONT_PATHS[k])));
-    // Ligatures (Geist has a "tt" ligature, among others) render fine but
-    // aren't reliably reverse-mapped when text is extracted or copied from
-    // the PDF -- confirmed by testing, "attached" copies out corrupted with
-    // the default features. This is a spec-sheet document meant to be
-    // searched and copied from, not display typography, so ligatures and
-    // other substitutions are disabled outright.
+    // Ligatures render fine visually but aren't reliably reverse-mapped
+    // when text is extracted or copied from the PDF (confirmed by testing
+    // with the previous typeface). This is a spec-sheet document meant to
+    // be searched and copied from, not display typography, so ligatures
+    // and other substitutions are disabled outright.
     const embedded = await Promise.all(
       bytes.map((b) =>
         doc.embedFont(b, {
@@ -106,6 +114,18 @@ export class PdfRenderer implements PageRenderer {
     return this.pages.length;
   }
 
+  /**
+   * pdf-lib has no native letter-spacing, so a tracked draw falls back to
+   * placing each glyph individually with the extra gap folded into its
+   * advance — the same total-width math `trackedWidth` uses, so alignment
+   * and this stay consistent.
+   */
+  private trackedWidth(text: string, font: PDFFont, size: number, tracking?: number): number {
+    const base = font.widthOfTextAtSize(text, size);
+    if (!tracking || text.length < 2) return base;
+    return base + tracking * size * (text.length - 1);
+  }
+
   drawText(text: string, x: number, y: number, opts: TextOptions): void {
     const page = this.page;
     const font = this.fonts[opts.font];
@@ -114,20 +134,32 @@ export class PdfRenderer implements PageRenderer {
 
     const rendered =
       opts.maxWidth !== undefined
-        ? truncateToFit(text, opts.maxWidth, (t) => font.widthOfTextAtSize(t, opts.size))
+        ? truncateToFit(text, opts.maxWidth, (t) =>
+            this.trackedWidth(t, font, opts.size, opts.tracking),
+          )
         : text;
 
+    const totalWidth = this.trackedWidth(rendered, font, opts.size, opts.tracking);
     let drawX = x;
     if (opts.align === "center" || opts.align === "right") {
-      const width = font.widthOfTextAtSize(rendered, opts.size);
-      drawX = opts.align === "center" ? x - width / 2 : x - width;
+      drawX = opts.align === "center" ? x - totalWidth / 2 : x - totalWidth;
     }
 
-    page.drawText(rendered, { x: drawX, y: pageHeight - y, size: opts.size, font, color });
+    if (!opts.tracking) {
+      page.drawText(rendered, { x: drawX, y: pageHeight - y, size: opts.size, font, color });
+      return;
+    }
+
+    const drawY = pageHeight - y;
+    let cursorX = drawX;
+    for (const char of rendered) {
+      page.drawText(char, { x: cursorX, y: drawY, size: opts.size, font, color });
+      cursorX += font.widthOfTextAtSize(char, opts.size) + opts.tracking * opts.size;
+    }
   }
 
-  measureTextWidth(text: string, opts: { size: number; font: FontKey }): number {
-    return this.fonts[opts.font].widthOfTextAtSize(text, opts.size);
+  measureTextWidth(text: string, opts: { size: number; font: FontKey; tracking?: number }): number {
+    return this.trackedWidth(text, this.fonts[opts.font], opts.size, opts.tracking);
   }
 
   drawRect(x: number, y: number, w: number, h: number, opts: RectOptions): void {
@@ -138,6 +170,20 @@ export class PdfRenderer implements PageRenderer {
       y: pageHeight - (y + h),
       width: w,
       height: h,
+      color: opts.fill ? hexToColor(opts.fill) : undefined,
+      borderColor: opts.stroke ? hexToColor(opts.stroke) : undefined,
+      borderWidth: opts.stroke ? (opts.strokeWidth ?? 1) : undefined,
+    });
+  }
+
+  drawCircle(cx: number, cy: number, r: number, opts: CircleOptions): void {
+    const page = this.page;
+    const pageHeight = page.getSize().height;
+    page.drawEllipse({
+      x: cx,
+      y: pageHeight - cy,
+      xScale: r,
+      yScale: r,
       color: opts.fill ? hexToColor(opts.fill) : undefined,
       borderColor: opts.stroke ? hexToColor(opts.stroke) : undefined,
       borderWidth: opts.stroke ? (opts.strokeWidth ?? 1) : undefined,

@@ -33,6 +33,16 @@
   }
 }
 
+/*
+ * Three families, one job each — no font family is ever declared outside
+ * this file. Instrument Serif for the wordmark, the landing headline, and
+ * PDF document headings; never in the interface. Public Sans for all
+ * interface text. JetBrains Mono for every figure — serial numbers,
+ * reference numbers, prices, dates, page numbers, completeness scores —
+ * without exception, right-aligned in tables. A number set in Public Sans
+ * anywhere is a bug. Two weights only, 400 and 500: no bold, no light.
+ * Sentence case everywhere, including buttons and labels — no all-caps.
+ */
 @theme inline {
   --color-paper: var(--paper);
   --color-paper-sunk: var(--paper-sunk);
@@ -41,14 +51,39 @@
   --color-ink-body: var(--ink-body);
   --color-ink: var(--ink);
   --color-oxblood: var(--oxblood);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+
+  --font-serif: var(--font-instrument-serif);
+  --font-sans: var(--font-public-sans);
+  --font-mono: var(--font-jetbrains-mono);
+
+  /* Type scale — each size paired with the line-height/tracking it's always used with. */
+  --text-headline: 34px;
+  --text-headline--line-height: 1.25;
+  --text-headline--letter-spacing: -0.005em;
+
+  --text-title: 18px;
+  --text-title--line-height: 1.25;
+
+  --text-body: 15px;
+  --text-body--line-height: 1.7;
+
+  --text-secondary: 13px;
+  --text-secondary--line-height: 1.7;
+
+  --text-table: 12px;
+  --text-table--line-height: 1.4;
+
+  --text-label: 11px;
+  --text-label--line-height: 1.4;
+  --text-label--letter-spacing: 0.08em;
 }
 
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-size: var(--text-body);
+  line-height: 1.7;
 }
 
 /* Subtle technical/blueprint texture for the landing hero — dots, not a grid line, so it stays quiet. */

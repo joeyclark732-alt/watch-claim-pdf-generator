@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Wordmark } from "@/components/Wordmark";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import { CompletenessPanel } from "@/components/CompletenessPanel";
@@ -35,13 +36,10 @@ function EditWatchForm() {
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-6 py-12">
       <header className="border-b border-rule pb-4">
-        <Link
-          href="/"
-          className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
-        >
-          ← Collection
+        <Link href="/" className="inline-block">
+          <Wordmark />
         </Link>
-        <h1 className="mt-1 text-2xl font-semibold">
+        <h1 className="mt-3 text-title font-medium">
           {watch ? `${watch.brand} ${watch.model_name}`.trim() || "Watch" : "Watch"}
         </h1>
       </header>

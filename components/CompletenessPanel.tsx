@@ -29,10 +29,10 @@ export function CompletenessPanel({
   return (
     <section className="border border-rule">
       <div className="flex items-center justify-between border-b border-rule bg-paper-sunk px-4 py-2">
-        <h2 className="text-xs uppercase tracking-widest text-ink-muted">
+        <h2 className="text-label text-ink-muted">
           Completeness
         </h2>
-        <p className="font-mono text-sm font-semibold text-oxblood">{result.score}/100</p>
+        <p className="font-mono text-sm font-medium text-oxblood">{result.score}/100</p>
       </div>
       {result.gaps.length > 0 ? (
         <ul className="divide-y divide-rule text-sm">
