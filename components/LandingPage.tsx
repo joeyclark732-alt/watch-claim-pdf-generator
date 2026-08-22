@@ -7,7 +7,7 @@ import { WatchIcon } from "./WatchIcon";
 const cornerTick = "absolute font-mono text-xs text-ink-muted";
 
 const tag =
-  "inline-flex w-fit items-center border border-rule bg-paper px-2 py-1 text-label text-ink-muted";
+  "inline-flex w-fit items-center border border-oxblood/40 bg-paper px-2 py-1 text-label text-oxblood";
 
 function ChecklistVisual() {
   const slots = [
@@ -168,7 +168,7 @@ function PricingCard({
     <div className="flex flex-col border border-rule bg-paper p-6">
       <h3 className="text-lg font-medium">{name}</h3>
       <p className="mt-1 text-xs text-ink-muted">{descriptor}</p>
-      <p className="mt-4 font-mono text-3xl font-medium">
+      <p className="mt-4 font-mono text-3xl font-medium text-oxblood">
         {price}
         {!isFree && (
           <span className="ml-1.5 text-xs font-normal text-ink-muted">one-time</span>
@@ -193,7 +193,7 @@ function PricingCard({
           <>
             {baseFeatures.map((f) => (
               <li key={f} className="flex items-start gap-2">
-                <span className="text-ink-muted">✓</span>
+                <span className="text-oxblood">✓</span>
                 <span>{f}</span>
               </li>
             ))}
@@ -206,11 +206,11 @@ function PricingCard({
           <>
             <li className="text-ink-muted">Everything in Free, plus:</li>
             <li className="flex items-start gap-2">
-              <span className="text-ink-muted">✓</span>
+              <span className="text-oxblood">✓</span>
               <span>Real, unwatermarked PDF export</span>
             </li>
             <li className="flex items-start gap-2">
-              <span className="text-ink-muted">✓</span>
+              <span className="text-oxblood">✓</span>
               <span>{extraFeature}</span>
             </li>
           </>
@@ -332,12 +332,6 @@ export function LandingPage() {
               >
                 Already have a license?
               </Link>
-              <Link
-                href="/backup"
-                className="text-label text-ink-muted hover:text-ink"
-              >
-                Restoring from a backup?
-              </Link>
             </div>
           </div>
 
@@ -349,6 +343,7 @@ export function LandingPage() {
 
       <div id="features" className="mx-auto flex w-full max-w-4xl scroll-mt-16 flex-col px-6 py-16">
         <h2 className="text-center text-2xl font-medium">Product Features</h2>
+        <div className="mx-auto mt-3 h-px w-10 bg-oxblood" />
         <div className="mx-auto mt-10 flex w-full flex-col gap-6">
           <FeatureRow
             tagLabel="Guided checklist"
@@ -384,7 +379,8 @@ export function LandingPage() {
       <div id="pricing" className="scroll-mt-16 border-t border-rule py-16">
         <div className="mx-auto w-full max-w-5xl px-6">
           <h2 className="text-center text-2xl font-medium">Built to be paid for once</h2>
-          <p className="mx-auto mt-2 max-w-md text-center text-sm text-ink-muted">
+          <div className="mx-auto mt-3 h-px w-10 bg-oxblood" />
+          <p className="mx-auto mt-4 max-w-md text-center text-sm text-ink-muted">
             Free to enter your entire collection, take every photo, and see
             your completeness scores. The only thing gated is exporting the
             real, unwatermarked PDF.
