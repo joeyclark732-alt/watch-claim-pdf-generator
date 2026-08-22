@@ -85,12 +85,6 @@ export function CollectionList() {
             Settings
           </Link>
           <Link
-            href="/preview"
-            className="text-label text-ink-muted hover:text-ink"
-          >
-            Preview claim file
-          </Link>
-          <Link
             href="/license"
             className="text-label text-ink-muted hover:text-ink"
           >
@@ -110,6 +104,15 @@ export function CollectionList() {
           </Link>
         </div>
       </header>
+
+      {visible.length > 0 && (
+        <Link
+          href="/preview"
+          className="flex items-center justify-center border border-oxblood bg-oxblood px-6 py-4 text-base font-medium text-paper transition hover:opacity-90"
+        >
+          Generate claim PDF →
+        </Link>
+      )}
 
       {editCount >= BACKUP_REMINDER_THRESHOLD && (
         <div className="flex items-center justify-between border border-rule bg-paper-sunk px-4 py-2 text-sm">

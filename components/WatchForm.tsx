@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 import type { ValuationBasis, WatchInput, WatchStatus } from "@/lib/db";
 
 const EMPTY_WATCH: WatchInput = {
@@ -83,11 +83,14 @@ export function WatchForm({
   onSubmit,
   submitLabel,
   onDelete,
+  children,
 }: {
   initialValue?: WatchInput;
   onSubmit: (value: WatchInput) => Promise<void>;
   submitLabel: string;
   onDelete?: () => Promise<void>;
+  /** Rendered inside the form, after the built-in fields and before the submit button. */
+  children?: ReactNode;
 }) {
   const [value, setValue] = useState<WatchInput>(initialValue ?? EMPTY_WATCH);
   const [complicationsText, setComplicationsText] = useState(
@@ -396,6 +399,8 @@ export function WatchForm({
           />
         </div>
       </section>
+
+      {children}
 
       {error && <p className="text-sm text-red-700">{error}</p>}
 

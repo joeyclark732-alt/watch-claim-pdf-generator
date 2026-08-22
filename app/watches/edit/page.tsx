@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { BackLink } from "@/components/BackLink";
 import { Wordmark } from "@/components/Wordmark";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
@@ -36,6 +37,7 @@ function EditWatchForm() {
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-6 py-12">
       <header className="border-b border-rule pb-4">
+        <BackLink />
         <Link href="/" className="inline-block">
           <Wordmark />
         </Link>
