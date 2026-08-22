@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Wordmark } from "./Wordmark";
 import { useEffect, useState } from "react";
 import {
@@ -21,6 +22,7 @@ function formatValue(watch: WatchRecord): string {
 }
 
 export function CollectionList() {
+  const router = useRouter();
   const [watches, setWatches] = useState<WatchRecord[] | null>(null);
   const [photos, setPhotos] = useState<PhotoRecord[]>([]);
   const [documents, setDocuments] = useState<DocumentRecord[]>([]);
@@ -143,57 +145,70 @@ export function CollectionList() {
           .
         </p>
       ) : (
-        <div className="overflow-x-auto border border-rule">
-          <table className="w-full min-w-[720px] border-collapse text-table">
-            <thead>
-              <tr className="border-b border-rule bg-paper-sunk text-left text-label text-ink-muted">
-                <th className="px-3 py-2 font-medium">Brand</th>
-                <th className="px-3 py-2 font-medium">Model</th>
-                <th className="px-3 py-2 font-medium">Reference</th>
-                <th className="px-3 py-2 font-medium">Serial</th>
-                <th className="px-3 py-2 font-medium">Status</th>
-                <th className="px-3 py-2 text-right font-medium">
-                  Completeness
-                </th>
-                <th className="px-3 py-2 text-right font-medium">
-                  Declared value
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {visible.map((watch) => (
-                <tr
-                  key={watch.id}
-                  className="border-b border-rule last:border-b-0 hover:bg-paper-sunk"
-                >
-                  <td className="px-3 py-2">
-                    <Link
-                      href={`/watches/edit?id=${watch.id}`}
-                      className="hover:underline"
-                    >
-                      {watch.brand || "—"}
-                    </Link>
-                  </td>
-                  <td className="px-3 py-2">{watch.model_name || "—"}</td>
-                  <td className="px-3 py-2 font-mono">
-                    {watch.reference_number || "—"}
-                  </td>
-                  <td className="px-3 py-2 font-mono">
-                    {watch.serial_number || "—"}
-                  </td>
-                  <td className="px-3 py-2 capitalize">
-                    {watch.status.replace("_", " / ")}
-                  </td>
-                  <td className="px-3 py-2 text-right font-mono font-medium text-oxblood">
-                    {scores.get(watch.id)}/100
-                  </td>
-                  <td className="px-3 py-2 text-right font-mono">
-                    {formatValue(watch)}
-                  </td>
+        <div>
+          <p className="mb-2 text-label text-ink-muted md:hidden">
+            Scroll right for status, completeness &amp; value →
+          </p>
+          <div className="relative overflow-x-auto border border-rule">
+            <table className="w-full min-w-[720px] border-collapse text-table">
+              <thead>
+                <tr className="border-b border-rule bg-paper-sunk text-left text-label text-ink-muted">
+                  <th className="px-3 py-2 font-medium">Brand</th>
+                  <th className="px-3 py-2 font-medium">Model</th>
+                  <th className="px-3 py-2 font-medium">Reference</th>
+                  <th className="px-3 py-2 font-medium">Serial</th>
+                  <th className="px-3 py-2 font-medium">Status</th>
+                  <th className="px-3 py-2 text-right font-medium">
+                    Completeness
+                  </th>
+                  <th className="px-3 py-2 text-right font-medium">
+                    Declared value
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {visible.map((watch) => {
+                  const href = `/watches/edit?id=${watch.id}`;
+                  return (
+                    <tr
+                      key={watch.id}
+                      onClick={(e) => {
+                        if ((e.target as HTMLElement).closest("a")) return;
+                        router.push(href);
+                      }}
+                      className="cursor-pointer border-b border-rule last:border-b-0 hover:bg-paper-sunk"
+                    >
+                      <td className="px-3 py-2">
+                        <Link href={href} className="hover:underline">
+                          {watch.brand || "—"}
+                        </Link>
+                      </td>
+                      <td className="px-3 py-2">{watch.model_name || "—"}</td>
+                      <td className="px-3 py-2 font-mono">
+                        {watch.reference_number || "—"}
+                      </td>
+                      <td className="px-3 py-2 font-mono">
+                        {watch.serial_number || "—"}
+                      </td>
+                      <td className="px-3 py-2 capitalize">
+                        {watch.status.replace("_", " / ")}
+                      </td>
+                      <td className="px-3 py-2 text-right font-mono font-medium text-oxblood">
+                        {scores.get(watch.id)}/100
+                      </td>
+                      <td className="px-3 py-2 text-right font-mono">
+                        {formatValue(watch)}
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-paper to-transparent md:hidden"
+            />
+          </div>
         </div>
       )}
     </main>
