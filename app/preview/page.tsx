@@ -160,16 +160,18 @@ export default function PreviewPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-6 py-12">
-      <header className="border-b border-rule pb-4">
+      <header className="flex items-start justify-between border-b border-rule pb-4">
+        <div>
+          <Link href="/" className="inline-block">
+            <Wordmark />
+          </Link>
+          <h1 className="mt-3 text-title font-medium">Preview</h1>
+          <p className="mt-1 text-xs text-ink-muted">
+            Every page at full fidelity, watermarked. The real, unwatermarked
+            PDF is generated after purchase.
+          </p>
+        </div>
         <BackLink />
-        <Link href="/" className="inline-block">
-          <Wordmark />
-        </Link>
-        <h1 className="mt-3 text-title font-medium">Preview</h1>
-        <p className="mt-1 text-xs text-ink-muted">
-          Every page at full fidelity, watermarked. The real, unwatermarked
-          PDF is generated after purchase.
-        </p>
       </header>
 
       {profile && profileComplete && <ExportSection ownedCount={ownedCount} />}

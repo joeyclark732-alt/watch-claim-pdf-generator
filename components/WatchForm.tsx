@@ -83,12 +83,15 @@ export function WatchForm({
   onSubmit,
   submitLabel,
   onDelete,
+  submitFullWidth,
   children,
 }: {
   initialValue?: WatchInput;
   onSubmit: (value: WatchInput) => Promise<void>;
   submitLabel: string;
   onDelete?: () => Promise<void>;
+  /** Stretches the submit button across the full form width, in place of the default inline size. */
+  submitFullWidth?: boolean;
   /** Rendered inside the form, after the built-in fields and before the submit button. */
   children?: ReactNode;
 }) {
@@ -404,11 +407,21 @@ export function WatchForm({
 
       {error && <p className="text-sm text-red-700">{error}</p>}
 
-      <div className="flex items-center justify-between border-t border-rule pt-6">
+      <div
+        className={
+          submitFullWidth
+            ? "border-t border-rule pt-6"
+            : "flex items-center justify-between border-t border-rule pt-6"
+        }
+      >
         <button
           type="submit"
           disabled={submitting}
-          className="border border-oxblood bg-oxblood px-5 py-2 text-sm font-medium text-paper transition hover:opacity-90 disabled:opacity-50"
+          className={
+            submitFullWidth
+              ? "block w-full border border-oxblood bg-oxblood py-4 text-base font-medium text-paper transition hover:opacity-90 disabled:opacity-50"
+              : "border border-oxblood bg-oxblood px-5 py-2 text-sm font-medium text-paper transition hover:opacity-90 disabled:opacity-50"
+          }
         >
           {submitting ? "Saving…" : submitLabel}
         </button>

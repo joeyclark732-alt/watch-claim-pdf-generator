@@ -18,12 +18,14 @@ export default function SettingsPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-6 py-12">
-      <header className="border-b border-rule pb-4">
+      <header className="flex items-start justify-between border-b border-rule pb-4">
+        <div>
+          <Link href="/" className="inline-block">
+            <Wordmark />
+          </Link>
+          <h1 className="mt-3 text-title font-medium">Settings</h1>
+        </div>
         <BackLink />
-        <Link href="/" className="inline-block">
-          <Wordmark />
-        </Link>
-        <h1 className="mt-3 text-title font-medium">Settings</h1>
       </header>
 
       {profile === undefined ? (
