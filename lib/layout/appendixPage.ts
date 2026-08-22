@@ -1,6 +1,6 @@
 import type { DocumentRecord, WatchRecord } from "@/lib/db";
 import { PAGE_HEIGHT_PT, PAGE_WIDTH_PT, type PageRenderer } from "./renderer";
-import { INK_MUTED, LINE } from "./theme";
+import { INK_MUTED, OXBLOOD, RULE } from "./theme";
 
 const MARGIN = 54;
 const CONTENT_WIDTH = PAGE_WIDTH_PT - 2 * MARGIN;
@@ -31,13 +31,15 @@ function drawCaption(
     .filter(Boolean)
     .join("  ·  ");
   renderer.drawText(subtitle, MARGIN, 74, { size: 9, font: "sans", color: INK_MUTED });
-  renderer.drawLine(MARGIN, 84, PAGE_WIDTH_PT - MARGIN, 84, { color: LINE });
+  // The one sanctioned use of oxblood in the exported PDF: the rule under
+  // each attached document's own caption header in the appendix.
+  renderer.drawLine(MARGIN, 84, PAGE_WIDTH_PT - MARGIN, 84, { color: OXBLOOD, width: 1.5 });
   return 96;
 }
 
 function drawPlaceholder(renderer: PageRenderer, top: number, bottom: number, fileName: string): void {
   const boxH = bottom - top;
-  renderer.drawRect(MARGIN, top, CONTENT_WIDTH, boxH, { stroke: LINE, strokeWidth: 1 });
+  renderer.drawRect(MARGIN, top, CONTENT_WIDTH, boxH, { stroke: RULE, strokeWidth: 1 });
   const center = top + boxH / 2;
   renderer.drawText(fileName, PAGE_WIDTH_PT / 2, center - 10, {
     size: 11,

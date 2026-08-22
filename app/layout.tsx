@@ -3,7 +3,7 @@ import { geistSans, geistMono } from "@/lib/fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Claim File",
+  title: "WatchClaim",
   description:
     "Local-first documentation for watch collections, built for insurance claims. Nothing is uploaded.",
 };

@@ -36,9 +36,9 @@ function toNumberOrNull(raw: string): number | null {
 
 const label = "block text-xs uppercase tracking-wide text-ink-muted mb-1";
 const input =
-  "w-full border border-line bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent";
+  "w-full border border-rule bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
 const sectionHeading =
-  "text-xs uppercase tracking-widest text-ink-muted border-b border-line pb-1 mb-4";
+  "text-xs uppercase tracking-widest text-ink-muted border-b border-rule pb-1 mb-4";
 
 function TriStateField({
   fieldLabel,
@@ -57,16 +57,16 @@ function TriStateField({
   return (
     <div>
       <label className={label}>{fieldLabel}</label>
-      <div className="flex border border-line text-xs">
+      <div className="flex border border-rule text-xs">
         {options.map((opt, i) => (
           <button
             key={String(opt.value)}
             type="button"
             onClick={() => onChange(opt.value)}
-            className={`flex-1 px-2 py-1.5 ${i > 0 ? "border-l border-line" : ""} ${
+            className={`flex-1 px-2 py-1.5 ${i > 0 ? "border-l border-rule" : ""} ${
               value === opt.value
                 ? "bg-ink text-paper"
-                : "bg-paper text-ink-muted hover:bg-ink/5"
+                : "bg-paper text-ink-muted hover:bg-paper-sunk"
             }`}
           >
             {opt.label}
@@ -290,7 +290,7 @@ export function WatchForm({
         <h2 className={sectionHeading}>Valuation</h2>
         <p className="mb-4 -mt-2 text-xs text-ink-muted">
           Declared value is owner-supplied, sourced from your own receipt or a
-          third-party appraisal. Claim File never estimates or looks up
+          third-party appraisal. WatchClaim never estimates or looks up
           market value.
         </p>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
@@ -398,11 +398,11 @@ export function WatchForm({
 
       {error && <p className="text-sm text-red-700">{error}</p>}
 
-      <div className="flex items-center justify-between border-t border-line pt-6">
+      <div className="flex items-center justify-between border-t border-rule pt-6">
         <button
           type="submit"
           disabled={submitting}
-          className="border border-ink bg-ink px-5 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent disabled:opacity-50"
+          className="border border-oxblood bg-oxblood px-5 py-2 text-sm font-medium text-paper transition hover:opacity-90 disabled:opacity-50"
         >
           {submitting ? "Saving…" : submitLabel}
         </button>

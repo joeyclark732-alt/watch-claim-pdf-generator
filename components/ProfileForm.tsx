@@ -12,7 +12,7 @@ const EMPTY_PROFILE: ProfileRecord = {
 
 const label = "block text-xs uppercase tracking-wide text-ink-muted mb-1";
 const input =
-  "w-full border border-line bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent";
+  "w-full border border-rule bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
 
 export function ProfileForm({
   initialValue,
@@ -94,11 +94,11 @@ export function ProfileForm({
 
       {error && <p className="text-sm text-red-700">{error}</p>}
 
-      <div className="flex items-center gap-4 border-t border-line pt-6">
+      <div className="flex items-center gap-4 border-t border-rule pt-6">
         <button
           type="submit"
           disabled={submitting}
-          className="border border-ink bg-ink px-5 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent disabled:opacity-50"
+          className="border border-oxblood bg-oxblood px-5 py-2 text-sm font-medium text-paper transition hover:opacity-90 disabled:opacity-50"
         >
           {submitting ? "Saving…" : "Save profile"}
         </button>

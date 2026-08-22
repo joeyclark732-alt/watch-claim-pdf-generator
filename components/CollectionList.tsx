@@ -59,16 +59,16 @@ export function CollectionList() {
 
   return (
     <main className="mx-auto flex w-full max-w-5xl flex-1 flex-col gap-8 px-6 py-12">
-      <header className="flex items-end justify-between border-b border-line pb-4">
+      <header className="flex items-end justify-between border-b border-rule pb-4">
         <div>
           <p className="text-xs uppercase tracking-widest text-ink-muted">
-            Claim File
+            WatchClaim
           </p>
           <h1 className="text-2xl font-semibold">Collection</h1>
           {collectionScore !== null && visible.length > 0 && (
             <p className="mt-1 text-xs text-ink-muted">
               Collection completeness (value-weighted):{" "}
-              <span className="font-mono text-ink">
+              <span className="font-mono font-semibold text-oxblood">
                 {collectionScore}/100
               </span>
             </p>
@@ -101,7 +101,7 @@ export function CollectionList() {
           </Link>
           <Link
             href="/watches/new"
-            className="border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent"
+            className="border border-oxblood bg-oxblood px-4 py-2 text-sm font-medium text-paper transition hover:opacity-90"
           >
             + Add watch
           </Link>
@@ -109,7 +109,7 @@ export function CollectionList() {
       </header>
 
       {editCount >= BACKUP_REMINDER_THRESHOLD && (
-        <div className="flex items-center justify-between border border-line bg-ink/5 px-4 py-2 text-sm">
+        <div className="flex items-center justify-between border border-rule bg-paper-sunk px-4 py-2 text-sm">
           <span>
             You&apos;ve made {editCount} changes since your last backup.
           </span>
@@ -142,10 +142,10 @@ export function CollectionList() {
           .
         </p>
       ) : (
-        <div className="overflow-x-auto border border-line">
+        <div className="overflow-x-auto border border-rule">
           <table className="w-full min-w-[720px] border-collapse text-sm">
             <thead>
-              <tr className="border-b border-line bg-ink/5 text-left text-xs uppercase tracking-wide text-ink-muted">
+              <tr className="border-b border-rule bg-paper-sunk text-left text-xs uppercase tracking-wide text-ink-muted">
                 <th className="px-3 py-2 font-medium">Brand</th>
                 <th className="px-3 py-2 font-medium">Model</th>
                 <th className="px-3 py-2 font-medium">Reference</th>
@@ -163,7 +163,7 @@ export function CollectionList() {
               {visible.map((watch) => (
                 <tr
                   key={watch.id}
-                  className="border-b border-line last:border-b-0 hover:bg-ink/5"
+                  className="border-b border-rule last:border-b-0 hover:bg-paper-sunk"
                 >
                   <td className="px-3 py-2">
                     <Link
@@ -183,7 +183,7 @@ export function CollectionList() {
                   <td className="px-3 py-2 capitalize">
                     {watch.status.replace("_", " / ")}
                   </td>
-                  <td className="px-3 py-2 text-right font-mono">
+                  <td className="px-3 py-2 text-right font-mono font-semibold text-oxblood">
                     {scores.get(watch.id)}/100
                   </td>
                   <td className="px-3 py-2 text-right font-mono">

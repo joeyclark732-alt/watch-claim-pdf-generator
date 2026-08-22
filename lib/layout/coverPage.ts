@@ -1,7 +1,7 @@
 import type { ProfileRecord, WatchRecord } from "@/lib/db";
 import { formatCurrency } from "@/lib/format/currency";
 import { PAGE_HEIGHT_PT, PAGE_WIDTH_PT, type PageRenderer } from "./renderer";
-import { INK_MUTED, LINE } from "./theme";
+import { INK_MUTED, RULE } from "./theme";
 import { wrapText } from "./wrapText";
 
 const MARGIN = 54;
@@ -30,7 +30,7 @@ export function renderCoverPage(
   const { profile, watches, generatedDate } = data;
   let y = 100;
 
-  renderer.drawText("CLAIM FILE", MARGIN, y, {
+  renderer.drawText("WATCHCLAIM", MARGIN, y, {
     size: 10,
     font: "mono",
     color: INK_MUTED,
@@ -42,7 +42,7 @@ export function renderCoverPage(
   });
   y += 48;
 
-  renderer.drawLine(MARGIN, y, PAGE_WIDTH_PT - MARGIN, y, { color: LINE });
+  renderer.drawLine(MARGIN, y, PAGE_WIDTH_PT - MARGIN, y, { color: RULE });
   y += 28;
 
   for (const line of wrapText(

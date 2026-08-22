@@ -10,7 +10,7 @@ const MIN_PASSPHRASE_LENGTH = 8;
 
 const label = "block text-xs uppercase tracking-wide text-ink-muted mb-1";
 const input =
-  "w-full border border-line bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent";
+  "w-full border border-rule bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
 
 function ExportSection() {
   const [passphrase, setPassphrase] = useState("");
@@ -41,7 +41,7 @@ function ExportSection() {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `claim-file-backup-${new Date().toISOString().slice(0, 10)}.claimfile`;
+      a.download = `watchclaim-backup-${new Date().toISOString().slice(0, 10)}.claimfile`;
       a.click();
       URL.revokeObjectURL(url);
 
@@ -57,7 +57,7 @@ function ExportSection() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 border border-line p-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 border border-rule p-4">
       <h2 className="text-xs uppercase tracking-widest text-ink-muted">Export</h2>
       <div>
         <label className={label}>Passphrase</label>
@@ -88,7 +88,7 @@ function ExportSection() {
         <button
           type="submit"
           disabled={busy}
-          className="border border-ink bg-ink px-5 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent disabled:opacity-50"
+          className="border border-oxblood bg-oxblood px-5 py-2 text-sm font-medium text-paper transition hover:opacity-90 disabled:opacity-50"
         >
           {busy ? "Encrypting…" : "Export backup"}
         </button>
@@ -131,7 +131,7 @@ function ImportSection() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 border border-line p-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 border border-rule p-4">
       <h2 className="text-xs uppercase tracking-widest text-ink-muted">Import</h2>
       <div>
         <label className={label}>Backup file</label>
@@ -152,7 +152,7 @@ function ImportSection() {
         <button
           type="submit"
           disabled={busy}
-          className="border border-ink bg-ink px-5 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent disabled:opacity-50"
+          className="border border-oxblood bg-oxblood px-5 py-2 text-sm font-medium text-paper transition hover:opacity-90 disabled:opacity-50"
         >
           {busy ? "Restoring…" : "Import backup"}
         </button>
@@ -164,7 +164,7 @@ function ImportSection() {
 export default function BackupPage() {
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-6 py-12">
-      <header className="border-b border-line pb-4">
+      <header className="border-b border-rule pb-4">
         <Link
           href="/"
           className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
@@ -174,7 +174,7 @@ export default function BackupPage() {
         <h1 className="mt-1 text-2xl font-semibold">Backup</h1>
       </header>
 
-      <p className="border border-line bg-ink/5 p-4 text-sm text-ink-muted">
+      <p className="border border-rule bg-paper-sunk p-4 text-sm text-ink-muted">
         This device&apos;s local storage is unencrypted at rest. Anyone with
         access to this browser or device can read your records directly. The
         exported backup file below is encrypted; the data sitting in this app

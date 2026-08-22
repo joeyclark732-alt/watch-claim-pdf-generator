@@ -2,7 +2,7 @@ import type { DocumentRecord, PhotoRecord, ShotType, WatchRecord } from "@/lib/d
 import { formatCurrency } from "@/lib/format/currency";
 import { createPageCursor } from "./cursor";
 import { PAGE_HEIGHT_PT, PAGE_WIDTH_PT, type PageRenderer } from "./renderer";
-import { INK_MUTED, LINE } from "./theme";
+import { INK_MUTED, RULE } from "./theme";
 import { wrapText } from "./wrapText";
 
 const MARGIN = 54;
@@ -46,7 +46,7 @@ function drawItemHeader(renderer: PageRenderer, watch: WatchRecord, y: number): 
     y += 14;
   }
   y += 8;
-  renderer.drawLine(MARGIN, y, PAGE_WIDTH_PT - MARGIN, y, { color: LINE });
+  renderer.drawLine(MARGIN, y, PAGE_WIDTH_PT - MARGIN, y, { color: RULE });
   return y + 20;
 }
 
@@ -196,7 +196,7 @@ export async function renderItemPage(
     if (photo) {
       await renderer.drawImage(photo.blob_full, cx, cy, cellW, cellPhotoH);
     } else {
-      renderer.drawRect(cx, cy, cellW, cellPhotoH, { stroke: LINE, strokeWidth: 1 });
+      renderer.drawRect(cx, cy, cellW, cellPhotoH, { stroke: RULE, strokeWidth: 1 });
       renderer.drawText("Not photographed", cx + cellW / 2, cy + cellPhotoH / 2, {
         size: 8,
         font: "sans",

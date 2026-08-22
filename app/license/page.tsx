@@ -8,7 +8,7 @@ import { verifyLicenseKey, type LicensePayload } from "@/lib/license/verify";
 
 const label = "block text-xs uppercase tracking-wide text-ink-muted mb-1";
 const input =
-  "w-full border border-line bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent";
+  "w-full border border-rule bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
 
 const TIER_ORDER: Tier[] = ["single", "collection", "unlimited"];
 
@@ -49,7 +49,7 @@ export default function LicensePage() {
 
   return (
     <main className="mx-auto flex w-full max-w-2xl flex-1 flex-col gap-8 px-6 py-12">
-      <header className="border-b border-line pb-4">
+      <header className="border-b border-rule pb-4">
         <Link
           href="/"
           className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
@@ -60,7 +60,7 @@ export default function LicensePage() {
       </header>
 
       {current !== undefined && (
-        <div className="border border-line p-4 text-sm">
+        <div className="border border-rule p-4 text-sm">
           {current ? (
             <p>
               Active license: <span className="font-mono">{TIER_LABEL[current.tier]}</span>{" "}
@@ -72,7 +72,7 @@ export default function LicensePage() {
         </div>
       )}
 
-      <div className="flex flex-col gap-3 border border-line p-4">
+      <div className="flex flex-col gap-3 border border-rule p-4">
         <label className={label}>License key</label>
         <textarea
           className={input}
@@ -87,17 +87,17 @@ export default function LicensePage() {
             type="button"
             onClick={handleSave}
             disabled={busy || raw.trim() === ""}
-            className="border border-ink bg-ink px-5 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent disabled:opacity-50"
+            className="border border-oxblood bg-oxblood px-5 py-2 text-sm font-medium text-paper transition hover:opacity-90 disabled:opacity-50"
           >
             {busy ? "Verifying…" : "Save license"}
           </button>
         </div>
       </div>
 
-      <div className="border border-line">
+      <div className="border border-rule">
         <table className="w-full border-collapse text-sm">
           <thead>
-            <tr className="border-b border-line bg-ink/5 text-left text-xs uppercase tracking-wide text-ink-muted">
+            <tr className="border-b border-rule bg-paper-sunk text-left text-xs uppercase tracking-wide text-ink-muted">
               <th className="px-3 py-2 font-medium">Tier</th>
               <th className="px-3 py-2 font-medium">Covers</th>
               <th className="px-3 py-2 text-right font-medium">Price</th>
@@ -105,7 +105,7 @@ export default function LicensePage() {
           </thead>
           <tbody>
             {TIER_ORDER.map((tier) => (
-              <tr key={tier} className="border-b border-line last:border-b-0">
+              <tr key={tier} className="border-b border-rule last:border-b-0">
                 <td className="px-3 py-2">{TIER_LABEL[tier]}</td>
                 <td className="px-3 py-2 text-ink-muted">{TIER_RANGE_LABEL[tier]}</td>
                 <td className="px-3 py-2 text-right font-mono">${TIER_PRICE_USD[tier]}</td>

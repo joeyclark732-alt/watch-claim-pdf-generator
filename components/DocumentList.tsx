@@ -22,7 +22,7 @@ const DOC_TYPES: { value: DocType; label: string }[] = [
 
 const label = "block text-xs uppercase tracking-wide text-ink-muted mb-1";
 const input =
-  "w-full border border-line bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent";
+  "w-full border border-rule bg-paper px-2 py-1.5 text-sm font-mono text-ink focus:outline-none focus:border-ink focus:ring-1 focus:ring-ink";
 
 function ViewLink({ document }: { document: DocumentRecord }) {
   const url = useObjectUrl(document.blob);
@@ -92,12 +92,12 @@ export function DocumentList({
 
   return (
     <section>
-      <h2 className="text-xs uppercase tracking-widest text-ink-muted border-b border-line pb-1 mb-4">
+      <h2 className="text-xs uppercase tracking-widest text-ink-muted border-b border-rule pb-1 mb-4">
         Documents
       </h2>
 
       {documents && documents.length > 0 && (
-        <ul className="mb-6 flex flex-col divide-y divide-line border border-line text-sm">
+        <ul className="mb-6 flex flex-col divide-y divide-rule border border-rule text-sm">
           {documents.map((doc) => (
             <li
               key={doc.id}
@@ -141,7 +141,7 @@ export function DocumentList({
 
       <form
         onSubmit={handleSubmit}
-        className="grid grid-cols-2 gap-4 border border-line p-4 md:grid-cols-3"
+        className="grid grid-cols-2 gap-4 border border-rule p-4 md:grid-cols-3"
       >
         <div>
           <label className={label}>Document type</label>
@@ -200,7 +200,7 @@ export function DocumentList({
           <button
             type="submit"
             disabled={submitting}
-            className="border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent disabled:opacity-50"
+            className="border border-oxblood bg-oxblood px-4 py-2 text-sm font-medium text-paper transition hover:opacity-90 disabled:opacity-50"
           >
             {submitting ? "Saving…" : "Add document"}
           </button>

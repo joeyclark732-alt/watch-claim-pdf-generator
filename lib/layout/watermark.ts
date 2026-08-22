@@ -1,4 +1,5 @@
 import { PAGE_HEIGHT_PT, PAGE_WIDTH_PT } from "./renderer";
+import { INK } from "./theme";
 
 /**
  * Deliberately not part of PageRenderer or any composer — the real PDF
@@ -15,7 +16,7 @@ export function applyPreviewWatermark(canvas: HTMLCanvasElement): void {
 
   ctx.save();
   ctx.globalAlpha = 0.1;
-  ctx.fillStyle = "#000000";
+  ctx.fillStyle = INK;
   ctx.font = "48px sans-serif";
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";

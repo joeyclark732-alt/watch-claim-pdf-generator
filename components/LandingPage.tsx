@@ -2,13 +2,13 @@ import Link from "next/link";
 import { TIER_LABEL, TIER_PRICE_USD, TIER_RANGE_LABEL } from "@/lib/license/tiers";
 
 const sectionHeading =
-  "text-xs uppercase tracking-widest text-ink-muted border-b border-line pb-2 mb-6";
+  "text-xs uppercase tracking-widest text-ink-muted border-b border-rule pb-2 mb-6";
 
 export function LandingPage() {
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-16 px-6 py-16">
-      <section className="border-b border-line pb-12">
-        <p className="text-xs uppercase tracking-widest text-ink-muted">Claim File</p>
+      <section className="border-b border-rule pb-12">
+        <p className="text-xs uppercase tracking-widest text-ink-muted">WatchClaim</p>
         <h1 className="mt-2 max-w-xl text-4xl font-semibold leading-tight">
           Insurance-ready watch documentation that never leaves your device.
         </h1>
@@ -21,7 +21,7 @@ export function LandingPage() {
         <div className="mt-8 flex flex-wrap items-center gap-6">
           <Link
             href="/watches/new"
-            className="border border-ink bg-ink px-5 py-2.5 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent"
+            className="border border-oxblood bg-oxblood px-5 py-2.5 text-sm font-medium text-paper transition hover:opacity-90"
           >
             Start documenting your collection
           </Link>
@@ -107,17 +107,17 @@ export function LandingPage() {
           your completeness scores. The only thing gated is exporting the
           real, unwatermarked PDF.
         </p>
-        <div className="border border-line">
+        <div className="border border-rule">
           <table className="w-full border-collapse text-sm">
             <thead>
-              <tr className="border-b border-line bg-ink/5 text-left text-xs uppercase tracking-wide text-ink-muted">
+              <tr className="border-b border-rule bg-paper-sunk text-left text-xs uppercase tracking-wide text-ink-muted">
                 <th className="px-3 py-2 font-medium">Tier</th>
                 <th className="px-3 py-2 font-medium">Covers</th>
                 <th className="px-3 py-2 text-right font-medium">Price</th>
               </tr>
             </thead>
             <tbody>
-              <tr className="border-b border-line">
+              <tr className="border-b border-rule">
                 <td className="px-3 py-2">Free</td>
                 <td className="px-3 py-2 text-ink-muted">
                   Unlimited entry, watermarked preview
@@ -125,7 +125,7 @@ export function LandingPage() {
                 <td className="px-3 py-2 text-right font-mono">$0</td>
               </tr>
               {(["single", "collection", "unlimited"] as const).map((tier) => (
-                <tr key={tier} className="border-b border-line last:border-b-0">
+                <tr key={tier} className="border-b border-rule last:border-b-0">
                   <td className="px-3 py-2">{TIER_LABEL[tier]}</td>
                   <td className="px-3 py-2 text-ink-muted">{TIER_RANGE_LABEL[tier]}</td>
                   <td className="px-3 py-2 text-right font-mono">

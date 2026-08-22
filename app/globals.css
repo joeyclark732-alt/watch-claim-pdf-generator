@@ -4,23 +4,43 @@
  * Paper/ink palette, deliberately not a SaaS-dashboard theme: this is meant
  * to read like a specification sheet, not a product. Sans for structure and
  * labels; mono for every entered value (serials, references, figures) so
- * data reads as recorded rather than typed. Light only for now — a dark
- * palette hasn't been designed and a half-built one is worse than none.
+ * data reads as recorded rather than typed. Warm, not cool.
+ *
+ * Oxblood is the only accent and appears in exactly three places: the
+ * primary button, the completeness figure, and the rule under a document
+ * header in the exported appendix. Nowhere else — a focus ring or hover
+ * state reaching for oxblood is a bug, not a stylistic choice.
  */
 :root {
-  --paper: #f7f5f0;
-  --ink: #1c1a17;
-  --ink-muted: #6b6558;
-  --line: #d8d3c7;
-  --accent: #7a5c2e;
+  --paper: #faf7f0;
+  --paper-sunk: #ede7da;
+  --rule: #ddd5c4;
+  --ink-muted: #8a8272;
+  --ink-body: #6b6355;
+  --ink: #1a1815;
+  --oxblood: #6e1e22;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1a1815;
+    --paper-sunk: #242019;
+    --rule: #3a3529;
+    --ink-muted: #948c7a;
+    --ink-body: #c7bfae;
+    --ink: #f5f1e8;
+    --oxblood: #ce3b42;
+  }
 }
 
 @theme inline {
   --color-paper: var(--paper);
-  --color-ink: var(--ink);
+  --color-paper-sunk: var(--paper-sunk);
+  --color-rule: var(--rule);
   --color-ink-muted: var(--ink-muted);
-  --color-line: var(--line);
-  --color-accent: var(--accent);
+  --color-ink-body: var(--ink-body);
+  --color-ink: var(--ink);
+  --color-oxblood: var(--oxblood);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }

@@ -81,8 +81,8 @@ function ShotSlot({
   }
 
   return (
-    <div className="border border-line">
-      <div className="border-b border-line bg-ink/5 px-3 py-1.5">
+    <div className="border border-rule">
+      <div className="border-b border-rule bg-paper-sunk px-3 py-1.5">
         <p className="text-xs uppercase tracking-wide">{slotLabel}</p>
       </div>
       {photo ? (
@@ -110,7 +110,7 @@ function ShotSlot({
           type="button"
           onClick={() => inputRef.current?.click()}
           disabled={busy}
-          className="flex h-32 w-full flex-col items-center justify-center gap-1 px-2 text-center text-ink-muted hover:bg-ink/5 disabled:opacity-50"
+          className="flex h-32 w-full flex-col items-center justify-center gap-1 px-2 text-center text-ink-muted hover:bg-paper-sunk disabled:opacity-50"
         >
           <span className="text-sm">{busy ? "Saving…" : "+ Add photo"}</span>
           <span className="text-xs">{hint}</span>
@@ -146,7 +146,7 @@ export function PhotoChecklist({
 
   return (
     <section>
-      <h2 className="text-xs uppercase tracking-widest text-ink-muted border-b border-line pb-1 mb-4">
+      <h2 className="text-xs uppercase tracking-widest text-ink-muted border-b border-rule pb-1 mb-4">
         Photos
       </h2>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">

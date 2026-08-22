@@ -1,4 +1,4 @@
-# Claim File
+# WatchClaim
 
 Local-first watch collection documentation for insurance claims. See
 `claim-file-v1-spec.md` for the full spec. No backend, no accounts —

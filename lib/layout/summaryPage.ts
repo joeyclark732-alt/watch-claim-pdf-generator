@@ -2,7 +2,7 @@ import type { WatchRecord } from "@/lib/db";
 import { formatCurrency } from "@/lib/format/currency";
 import { createPageCursor } from "./cursor";
 import { PAGE_HEIGHT_PT, PAGE_WIDTH_PT, type PageRenderer } from "./renderer";
-import { INK_MUTED, LINE } from "./theme";
+import { INK_MUTED, RULE } from "./theme";
 
 const MARGIN = 54;
 const ROW_HEIGHT = 20;
@@ -38,7 +38,7 @@ function drawColumnHeaders(renderer: PageRenderer, y: number): number {
     });
   });
   y += 6;
-  renderer.drawLine(MARGIN, y, PAGE_WIDTH_PT - MARGIN, y, { color: LINE });
+  renderer.drawLine(MARGIN, y, PAGE_WIDTH_PT - MARGIN, y, { color: RULE });
   return y + HEADER_HEIGHT - 6;
 }
 

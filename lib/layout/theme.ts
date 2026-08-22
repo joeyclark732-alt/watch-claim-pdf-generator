@@ -1,11 +1,14 @@
 /**
  * Same palette as app/globals.css's :root tokens. Canvas fillStyle doesn't
  * resolve CSS custom properties, so the hex values are duplicated here
- * rather than read from the DOM — this is fine since the palette is a
- * deliberate fixed light-only design (see Phase 1), not theme-dependent.
+ * rather than read from the DOM. Always the light values, deliberately —
+ * the exported document is a fixed physical artifact, not a themed surface,
+ * so it doesn't follow the viewer's OS dark-mode preference.
  */
-export const INK = "#1c1a17";
-export const INK_MUTED = "#6b6558";
-export const LINE = "#d8d3c7";
-export const PAPER = "#f7f5f0";
-export const ACCENT = "#7a5c2e";
+export const PAPER = "#faf7f0";
+export const PAPER_SUNK = "#ede7da";
+export const RULE = "#ddd5c4";
+export const INK_MUTED = "#8a8272";
+export const INK_BODY = "#6b6355";
+export const INK = "#1a1815";
+export const OXBLOOD = "#6e1e22";

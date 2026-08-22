@@ -34,7 +34,7 @@ function EditWatchForm() {
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-8 px-6 py-12">
-      <header className="border-b border-line pb-4">
+      <header className="border-b border-rule pb-4">
         <Link
           href="/"
           className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"

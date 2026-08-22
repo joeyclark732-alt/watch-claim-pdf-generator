@@ -2,7 +2,7 @@ import fontkit from "@pdf-lib/fontkit";
 import { PDFDocument, rgb, type Color, type PDFFont, type PDFPage } from "pdf-lib";
 import { containFit } from "./imageFit";
 import type { FontKey, ImageOptions, LineOptions, PageRenderer, RectOptions, TextOptions } from "./renderer";
-import { INK } from "./theme";
+import { INK, PAPER } from "./theme";
 import { truncateToFit } from "./truncateText";
 
 const FONT_PATHS: Record<FontKey, string> = {
@@ -82,6 +82,16 @@ export class PdfRenderer implements PageRenderer {
 
   addPage(widthPt: number, heightPt: number): void {
     const page = this.doc.addPage([widthPt, heightPt]);
+    // PDF pages default to white; filled explicitly so the exported document
+    // carries the same warm paper tone as the canvas preview, not a stark
+    // white the palette elsewhere deliberately avoids.
+    page.drawRectangle({
+      x: 0,
+      y: 0,
+      width: widthPt,
+      height: heightPt,
+      color: hexToColor(PAPER),
+    });
     this.pages.push(page);
     this.current = page;
   }

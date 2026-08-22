@@ -1,7 +1,7 @@
 import { geistMono, geistSans, geistSansBold } from "@/lib/fonts";
 import { containFit } from "./imageFit";
 import type { ImageOptions, LineOptions, PageRenderer, RectOptions, TextOptions } from "./renderer";
-import { INK } from "./theme";
+import { INK, PAPER } from "./theme";
 import { truncateToFit } from "./truncateText";
 
 /** Rendered at 2x for a crisp preview; layout math stays in points throughout. */
@@ -51,7 +51,7 @@ export class CanvasRenderer implements PageRenderer {
     const ctx = canvas.getContext("2d");
     if (!ctx) throw new Error("Canvas 2D context unavailable.");
     ctx.scale(SCALE, SCALE);
-    ctx.fillStyle = "#ffffff";
+    ctx.fillStyle = PAPER;
     ctx.fillRect(0, 0, widthPt, heightPt);
     this.pages.push(canvas);
     this.contexts.push(ctx);

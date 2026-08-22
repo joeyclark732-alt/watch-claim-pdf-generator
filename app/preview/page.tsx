@@ -33,7 +33,7 @@ function ExportSection({ ownedCount }: { ownedCount: number }) {
 
   if (!license) {
     return (
-      <div className="border border-line p-4 text-sm">
+      <div className="border border-rule p-4 text-sm">
         <p className="mb-3">
           A license unlocks the real, unwatermarked PDF export.{" "}
           <Link href="/license" className="underline underline-offset-2">
@@ -44,7 +44,7 @@ function ExportSection({ ownedCount }: { ownedCount: number }) {
         <table className="w-full border-collapse text-xs">
           <tbody>
             {TIER_ORDER.map((tier) => (
-              <tr key={tier} className="border-t border-line">
+              <tr key={tier} className="border-t border-rule">
                 <td className="py-1 pr-3">{TIER_LABEL[tier]}</td>
                 <td className="py-1 pr-3 text-ink-muted">{TIER_RANGE_LABEL[tier]}</td>
                 <td className="py-1 text-right font-mono">${TIER_PRICE_USD[tier]}</td>
@@ -61,7 +61,7 @@ function ExportSection({ ownedCount }: { ownedCount: number }) {
 
   if (overCap) {
     return (
-      <div className="border border-line p-4 text-sm">
+      <div className="border border-rule p-4 text-sm">
         <p>
           Your {TIER_LABEL[license.tier]} license covers up to {cap} watches; you
           have {ownedCount}.{" "}
@@ -85,7 +85,7 @@ function ExportSection({ ownedCount }: { ownedCount: number }) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = `claim-file-${new Date().toISOString().slice(0, 10)}.pdf`;
+      a.download = `watchclaim-${new Date().toISOString().slice(0, 10)}.pdf`;
       a.click();
       URL.revokeObjectURL(url);
     } catch (err) {
@@ -96,7 +96,7 @@ function ExportSection({ ownedCount }: { ownedCount: number }) {
   }
 
   return (
-    <div className="border border-line p-4 text-sm">
+    <div className="border border-rule p-4 text-sm">
       <p className="mb-3 text-ink-muted">
         Licensed: {TIER_LABEL[license.tier]} ({license.email})
       </p>
@@ -105,7 +105,7 @@ function ExportSection({ ownedCount }: { ownedCount: number }) {
         type="button"
         onClick={handleExport}
         disabled={exporting}
-        className="border border-ink bg-ink px-5 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent disabled:opacity-50"
+        className="border border-oxblood bg-oxblood px-5 py-2 text-sm font-medium text-paper transition hover:opacity-90 disabled:opacity-50"
       >
         {exporting ? "Generating…" : "Export PDF"}
       </button>
@@ -158,14 +158,14 @@ export default function PreviewPage() {
 
   return (
     <main className="mx-auto flex w-full max-w-4xl flex-1 flex-col gap-6 px-6 py-12">
-      <header className="border-b border-line pb-4">
+      <header className="border-b border-rule pb-4">
         <Link
           href="/"
           className="text-xs uppercase tracking-widest text-ink-muted hover:text-ink"
         >
           ← Collection
         </Link>
-        <h1 className="mt-1 text-2xl font-semibold">Claim File Preview</h1>
+        <h1 className="mt-1 text-2xl font-semibold">WatchClaim Preview</h1>
         <p className="mt-1 text-xs text-ink-muted">
           Every page at full fidelity, watermarked. The real, unwatermarked
           PDF is generated after purchase.
@@ -177,14 +177,14 @@ export default function PreviewPage() {
       {profile === undefined ? (
         <p className="text-sm text-ink-muted">Loading…</p>
       ) : !profileComplete ? (
-        <div className="border border-line p-6 text-sm">
+        <div className="border border-rule p-6 text-sm">
           <p className="mb-4">
             Add your name and mailing address in Settings before previewing —
             they appear on the cover page.
           </p>
           <Link
             href="/settings"
-            className="border border-ink bg-ink px-4 py-2 text-sm font-medium text-paper transition hover:bg-accent hover:border-accent"
+            className="border border-oxblood bg-oxblood px-4 py-2 text-sm font-medium text-paper transition hover:opacity-90"
           >
             Go to Settings
           </Link>
@@ -201,7 +201,7 @@ export default function PreviewPage() {
               key={i}
               src={src}
               alt={`Page ${i + 1}`}
-              className="w-full max-w-[612px] border border-line shadow-sm"
+              className="w-full max-w-[612px] border border-rule shadow-sm"
             />
           ))}
         </div>

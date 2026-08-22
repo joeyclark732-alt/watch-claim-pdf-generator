@@ -27,15 +27,15 @@ export function CompletenessPanel({
   if (!result) return null;
 
   return (
-    <section className="border border-line">
-      <div className="flex items-center justify-between border-b border-line bg-ink/5 px-4 py-2">
+    <section className="border border-rule">
+      <div className="flex items-center justify-between border-b border-rule bg-paper-sunk px-4 py-2">
         <h2 className="text-xs uppercase tracking-widest text-ink-muted">
           Completeness
         </h2>
-        <p className="font-mono text-sm">{result.score}/100</p>
+        <p className="font-mono text-sm font-semibold text-oxblood">{result.score}/100</p>
       </div>
       {result.gaps.length > 0 ? (
-        <ul className="divide-y divide-line text-sm">
+        <ul className="divide-y divide-rule text-sm">
           {result.gaps.map((gap) => (
             <li
               key={gap.label}
