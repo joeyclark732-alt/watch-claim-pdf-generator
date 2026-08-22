@@ -50,3 +50,9 @@ body {
   color: var(--ink);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
+
+/* Subtle technical/blueprint texture for the landing hero — dots, not a grid line, so it stays quiet. */
+.dot-grid {
+  background-image: radial-gradient(circle, var(--rule) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
