@@ -2,9 +2,6 @@ import Link from "next/link";
 import { TIER_LABEL, TIER_PRICE_USD, TIER_RANGE_LABEL, WATCH_CAP, type Tier } from "@/lib/license/tiers";
 import { WatchIcon } from "./WatchIcon";
 
-const sectionHeading =
-  "text-xs uppercase tracking-widest text-ink-muted border-b border-rule pb-2 mb-6";
-
 const cornerTick = "absolute font-mono text-xs text-ink-muted";
 
 const tag =
@@ -57,6 +54,32 @@ function NetworkVisual() {
             <span className="shrink-0 text-ink-muted">{r.status}</span>
           </div>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function ValuationVisual() {
+  const fields = [
+    { label: "Declared value", value: "$5,200" },
+    { label: "Valuation basis", value: "Receipt" },
+    { label: "Valuation date", value: "2025-03-14" },
+  ];
+  return (
+    <div className="w-full max-w-sm border border-rule bg-paper">
+      <div className="border-b border-rule bg-paper-sunk px-3 py-1.5 font-mono text-[10px] uppercase tracking-widest text-ink-muted">
+        Valuation
+      </div>
+      <div className="flex flex-col divide-y divide-rule text-xs">
+        {fields.map((f) => (
+          <div key={f.label} className="flex items-center justify-between px-3 py-2.5">
+            <span className="font-mono text-[10px] uppercase text-ink-muted">{f.label}</span>
+            <span className="font-mono">{f.value}</span>
+          </div>
+        ))}
+      </div>
+      <div className="border-t border-rule px-3 py-2 text-[10px] text-ink-muted">
+        Owner-declared. Never estimated.
       </div>
     </div>
   );
@@ -173,7 +196,7 @@ function PricingCard({
               </li>
             ))}
             <li className="flex items-start gap-2 text-ink-muted">
-              <span>–</span>
+              <span>×</span>
               <span>Watermarked preview only</span>
             </li>
           </>
@@ -198,7 +221,7 @@ function PricingCard({
 function DocumentMockup() {
   return (
     <div className="relative mx-auto w-full max-w-md">
-      {/* Background card: an abstracted skeleton of the exported cover page —
+      {/* Background card: an abstracted skeleton of the exported cover page,
           not real content, just enough shape to read as "a document." */}
       <div className="border border-rule bg-paper p-6 shadow-sm">
         <p className="font-mono text-[10px] uppercase tracking-widest text-ink-muted">
@@ -221,7 +244,7 @@ function DocumentMockup() {
         </div>
       </div>
 
-      {/* Floating card: the completeness figure — the one place besides the
+      {/* Floating card: the completeness figure, the one place besides the
           primary button and the appendix rule where oxblood is sanctioned. */}
       <div className="absolute -bottom-7 -left-6 w-40 border border-rule bg-paper p-4 shadow-md sm:-left-10">
         <p className="font-mono text-[10px] uppercase tracking-widest text-ink-muted">
@@ -250,6 +273,32 @@ function DocumentMockup() {
 export function LandingPage() {
   return (
     <main className="flex flex-1 flex-col">
+      <header className="sticky top-0 z-10 border-b border-rule bg-paper/95 backdrop-blur">
+        <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4">
+          <span className="shrink-0 text-xs uppercase tracking-widest text-ink-muted">WatchClaim</span>
+          <nav className="flex items-center gap-4 sm:gap-6">
+            <a
+              href="#features"
+              className="hidden text-xs uppercase tracking-widest text-ink-muted hover:text-ink sm:inline"
+            >
+              Features
+            </a>
+            <a
+              href="#pricing"
+              className="hidden text-xs uppercase tracking-widest text-ink-muted hover:text-ink sm:inline"
+            >
+              Pricing
+            </a>
+            <Link
+              href="/watches/new"
+              className="shrink-0 whitespace-nowrap border border-oxblood bg-oxblood px-3 py-1.5 text-xs font-medium text-paper transition hover:opacity-90"
+            >
+              Get started
+            </Link>
+          </nav>
+        </div>
+      </header>
+
       <section className="dot-grid relative overflow-hidden border-b border-rule">
         <WatchIcon className="pointer-events-none absolute -right-32 -top-32 h-[520px] w-[520px] text-ink opacity-[0.035]" />
         <span className={`${cornerTick} left-4 top-4`}>+</span>
@@ -266,7 +315,7 @@ export function LandingPage() {
             <p className="mt-4 max-w-lg text-sm text-ink-muted">
               Enter your collection, photograph it against a guided checklist,
               attach receipts and appraisals, and export a claim file an
-              adjuster can act on — all stored only in this browser. No
+              adjuster can act on. All stored only in this browser. No
               accounts, no database, nothing uploaded, ever.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-6">
@@ -297,42 +346,41 @@ export function LandingPage() {
         </div>
       </section>
 
-      <div className="mx-auto flex w-full max-w-4xl flex-col gap-6 px-6 py-16">
-        <FeatureRow
-          tagLabel="Guided checklist"
-          title="One named shot at a time,"
-          subtitle="not nine wrist shots"
-          body="The app asks for exactly one shot at a time — dial, caseback, serial macro, clasp — so you end up with the photos an adjuster actually needs, not a phone full of pictures of the same angle."
-          visual={<ChecklistVisual />}
-        />
-        <FeatureRow
-          tagLabel="Verifiable, not promised"
-          title="Nothing leaves this device,"
-          subtitle="except a Stripe checkout"
-          body="This app's Content Security Policy restricts every outbound call to Stripe, and only Stripe. Open your browser's devtools and check the Network tab yourself — it isn't a claim you have to take on faith."
-          visual={<NetworkVisual />}
-        />
-        <FeatureRow
-          tagLabel="Completeness score"
-          title="Every gap, named —"
-          subtitle="with exactly what it's worth"
-          body="No vague nagging. Each unscored item shows a specific instruction and its point value, so you always know exactly what closes the gap between a bare entry and a complete one."
-          visual={<ScoreVisual />}
-        />
+      <div id="features" className="mx-auto flex w-full max-w-4xl scroll-mt-16 flex-col px-6 py-16">
+        <h2 className="text-center text-2xl font-semibold">Product Features</h2>
+        <div className="mx-auto mt-10 flex w-full flex-col gap-6">
+          <FeatureRow
+            tagLabel="Guided checklist"
+            title="One named shot at a time,"
+            subtitle="not nine wrist shots"
+            body="The app asks for exactly one shot at a time: dial, caseback, serial macro, clasp, so you end up with the photos an adjuster actually needs, not a phone full of pictures of the same angle."
+            visual={<ChecklistVisual />}
+          />
+          <FeatureRow
+            tagLabel="Verifiable, not promised"
+            title="Nothing leaves this device,"
+            subtitle="except a Stripe checkout"
+            body="This app's Content Security Policy restricts every outbound call to Stripe, and only Stripe. Open your browser's devtools and check the Network tab yourself. It isn't a claim you have to take on faith."
+            visual={<NetworkVisual />}
+          />
+          <FeatureRow
+            tagLabel="Completeness score"
+            title="Every gap, named,"
+            subtitle="with exactly what it's worth"
+            body="No vague nagging. Each unscored item shows a specific instruction and its point value, so you always know exactly what closes the gap between a bare entry and a complete one."
+            visual={<ScoreVisual />}
+          />
+          <FeatureRow
+            tagLabel="No valuations"
+            title="Declared values are yours,"
+            subtitle="never estimated by us"
+            body="Sourced from your own receipt or a third-party appraisal. This app never estimates or looks up market value, and the exported document says so on its cover page."
+            visual={<ValuationVisual />}
+          />
+        </div>
       </div>
 
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-16 px-6 pb-16">
-        <section>
-          <h2 className={sectionHeading}>No valuations</h2>
-          <p className="max-w-xl text-sm leading-relaxed">
-            Declared values are yours, sourced from your own receipt or a
-            third-party appraisal. This app never estimates or looks up
-            market value — the exported document says so on its cover page.
-          </p>
-        </section>
-      </div>
-
-      <div className="border-t border-rule py-16">
+      <div id="pricing" className="scroll-mt-16 border-t border-rule py-16">
         <div className="mx-auto w-full max-w-5xl px-6">
           <h2 className="text-center text-2xl font-semibold">Built to be paid for once</h2>
           <p className="mx-auto mt-2 max-w-md text-center text-sm text-ink-muted">
@@ -360,7 +408,7 @@ export function LandingPage() {
           </div>
 
           <p className="mt-6 text-center text-xs text-ink-muted">
-            Purchasing isn&apos;t live yet — checkout is coming soon. Already
+            Purchasing isn&apos;t live yet. Checkout is coming soon. Already
             licensed?{" "}
             <Link href="/license" className="underline underline-offset-2">
               Enter your key
