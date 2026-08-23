@@ -3,6 +3,7 @@
 import { useRef, type ChangeEvent } from "react";
 import type { ShotType } from "@/lib/db";
 import { useObjectUrl } from "@/lib/hooks/useObjectUrl";
+import { ShotExampleButton } from "./ShotExampleButton";
 
 const SHOT_TYPES: { type: ShotType; label: string; hint: string }[] = [
   { type: "dial", label: "Dial", hint: "Straight on, full face" },
@@ -43,12 +44,14 @@ function LocalPhotoThumb({ file }: { file: File }) {
 }
 
 function LocalShotSlot({
+  type,
   slotLabel,
   hint,
   file,
   onSelect,
   onRemove,
 }: {
+  type: ShotType;
   slotLabel: string;
   hint: string;
   file: File | undefined;
@@ -65,8 +68,9 @@ function LocalShotSlot({
 
   return (
     <div className="border border-rule">
-      <div className="border-b border-rule bg-paper-sunk px-3 py-1.5">
+      <div className="flex items-center justify-between gap-2 border-b border-rule bg-paper-sunk px-3 py-1.5">
         <p className="text-label">{slotLabel}</p>
+        <ShotExampleButton type={type} label={slotLabel} hint={hint} />
       </div>
       {file ? (
         <div>
@@ -128,6 +132,7 @@ export function PhotoPicker({
         {SHOT_TYPES.map(({ type, label: shotLabel, hint }) => (
           <LocalShotSlot
             key={type}
+            type={type}
             slotLabel={shotLabel}
             hint={hint}
             file={value[type]}

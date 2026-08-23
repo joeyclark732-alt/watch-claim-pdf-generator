@@ -39,6 +39,7 @@ export function DocumentPicker({
   const [issuedDate, setIssuedDate] = useState("");
   const [issuerName, setIssuerName] = useState("");
   const [notes, setNotes] = useState("");
+  const [fileName, setFileName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const fileRef = useRef<HTMLInputElement>(null);
 
@@ -62,6 +63,7 @@ export function DocumentPicker({
     setIssuedDate("");
     setIssuerName("");
     setNotes("");
+    setFileName("");
     setError(null);
     if (fileRef.current) fileRef.current.value = "";
   }
@@ -125,7 +127,20 @@ export function DocumentPicker({
         </div>
         <div>
           <label className={label}>File</label>
-          <input ref={fileRef} type="file" accept="image/*,application/pdf" className={input} />
+          <button
+            type="button"
+            onClick={() => fileRef.current?.click()}
+            className={`${input} truncate text-left ${fileName ? "" : "text-ink-muted"}`}
+          >
+            {fileName || "Press here to add a file"}
+          </button>
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*,application/pdf"
+            className="hidden"
+            onChange={(e) => setFileName(e.target.files?.[0]?.name ?? "")}
+          />
         </div>
         <div>
           <label className={label}>Issued date</label>

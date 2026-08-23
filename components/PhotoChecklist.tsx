@@ -9,6 +9,7 @@ import {
   type ShotType,
 } from "@/lib/db";
 import { useObjectUrl } from "@/lib/hooks/useObjectUrl";
+import { ShotExampleButton } from "./ShotExampleButton";
 
 const SHOT_TYPES: { type: ShotType; label: string; hint: string }[] = [
   { type: "dial", label: "Dial", hint: "Straight on, full face" },
@@ -49,12 +50,14 @@ function PhotoThumb({ blob }: { blob: Blob }) {
 }
 
 function ShotSlot({
+  type,
   slotLabel,
   hint,
   photo,
   onUpload,
   onDelete,
 }: {
+  type: ShotType;
   slotLabel: string;
   hint: string;
   photo: PhotoRecord | undefined;
@@ -82,8 +85,9 @@ function ShotSlot({
 
   return (
     <div className="border border-rule">
-      <div className="border-b border-rule bg-paper-sunk px-3 py-1.5">
+      <div className="flex items-center justify-between gap-2 border-b border-rule bg-paper-sunk px-3 py-1.5">
         <p className="text-label">{slotLabel}</p>
+        <ShotExampleButton type={type} label={slotLabel} hint={hint} />
       </div>
       {photo ? (
         <div>
@@ -153,6 +157,7 @@ export function PhotoChecklist({
         {SHOT_TYPES.map(({ type, label, hint }) => (
           <ShotSlot
             key={type}
+            type={type}
             slotLabel={label}
             hint={hint}
             photo={byShotType.get(type)}

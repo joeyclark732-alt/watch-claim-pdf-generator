@@ -239,7 +239,7 @@ export function WatchForm({
       </section>
 
       <section>
-        <h2 className={sectionHeading}>Provenance</h2>
+        <h2 className={sectionHeading}>Purchase History</h2>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
           <div>
             <label className={label}>Purchase date</label>
@@ -356,17 +356,21 @@ export function WatchForm({
       <section>
         <h2 className={sectionHeading}>Condition & status</h2>
         <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          <div className="col-span-2 md:col-span-3">
+          <div>
             <label className={label}>Condition notes</label>
-            <textarea
+            <select
               className={input}
-              rows={3}
               value={value.condition_notes}
               onChange={(e) =>
                 setValue({ ...value, condition_notes: e.target.value })
               }
-              placeholder="Marks, scratches, patina, replaced parts"
-            />
+            >
+              <option value="">Not set</option>
+              <option value="New">New</option>
+              <option value="Used - like new">Used - like new</option>
+              <option value="Used">Used</option>
+              <option value="Used - visible wear">Used - visible wear</option>
+            </select>
           </div>
           <div>
             <label className={label}>Status</label>
